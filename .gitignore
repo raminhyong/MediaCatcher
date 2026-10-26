@@ -25,6 +25,10 @@ tools/*.zip
 installer/Output/
 installer/*.exe
 
+# Root-level installers / reference binaries (not source)
+/YTDSetup.exe
+/windowsdesktop-runtime-*.exe
+
 # Local runtime data
 *.db
 *.db-wal

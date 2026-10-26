@@ -18,7 +18,7 @@ Browser (Extension MV3)  ──Native Messaging──▶  MediaCatcher.NativeHos
                   (แบ่ง segment + resume)        (วิดีโอ/สตรีม/แยกเสียง)      (แยกหน้า + รวม PDF)
 ```
 
-- **Extension** (`extension/`): Manifest V3, ดักจับ media ผ่าน `webRequest` + DOM scan แล้วส่งคำสั่งไปยัง Native Host
+- **Extension** (`extension/`): Manifest V3, ดักจับ media ผ่าน `webRequest` + DOM scan (รวม iframe) และตรวจจับ **URL ของหน้าเว็บ** สำหรับ YouTube/ebook แล้วส่งคำสั่งไปยัง Native Host
 - **NativeHost** (`src/MediaCatcher.NativeHost`): สะพาน Chrome/Edge Native Messaging → Named Pipe
 - **App** (`src/MediaCatcher.App`): UI Avalonia + tray + จัดการคิว/ตั้งค่า
 - **Core** (`src/MediaCatcher.Core`): engine ดาวน์โหลด, คิว, เก็บข้อมูล SQLite, การเชื่อมต่อ IPC
@@ -107,9 +107,15 @@ tests/
 | :--- | :--- | :--- |
 | `Http` | ไฟล์ตรง (mp4/mp3/pdf/zip…) | แบ่ง connection หลายเส้น + resume |
 | `YtDlp` | YouTube/Vimeo/สตรีม `.m3u8`/`.mpd` ฯลฯ | ต้องมี `yt-dlp` + `ffmpeg` |
-| `Document` | Flipbook (anyflip.com, fliphtml5.com ฯลฯ) | แยกหน้าภาพแล้วรวมเป็น PDF |
+| `Document` | Flipbook (anyflip.com, fliphtml5.com, pubhtml5.com, heyzine.com ฯลฯ) | แยกหน้าภาพแล้วรวมเป็น PDF (รองรับ WebP → JPEG ผ่าน ffmpeg) |
 
 การเลือก engine เป็นอัตโนมัติผ่าน `EngineRouter` (ดู host list ใน `src/MediaCatcher.Core/Routing/EngineRouter.cs`)
+
+## การตรวจจับของ Extension
+
+- **URL หน้าเว็บ**: วิดีโอ (YouTube watch/shorts, Vimeo, Dailymotion ฯลฯ) จะถูกตรวจจับจาก URL ของหน้าเว็บ แล้วส่งให้ `YtDlp` (เพราะ YouTube ใช้ MSE/`blob:` จึงไม่มี URL `.mp4` ตรง ๆ ให้ดัก)
+- **Flipbook (ebook)**: เว็บอ่านหนังสือ (anyflip/fliphtml5/pubhtml5/heyzine ฯลฯ) จะถูกตรวจจับเป็นหมวด "เอกสาร" แล้วแปลงเป็น PDF
+- **รวมรูปเป็น PDF**: ปุ่ม "รวมรูปเป็น PDF" ใน popup รวมรูปภาพที่ตรวจพบทั้งหมดเป็น PDF ไฟล์เดียว (ใช้กับ ebook ที่ไม่ใช่ flipbook ได้)
 
 ## หมายเหตุด้านกฎหมาย/จริยธรรม
 
