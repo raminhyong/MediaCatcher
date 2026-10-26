@@ -1,0 +1,435 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="AppTitle" xml:space="preserve">
+    <value>Media Catcher</value>
+  </data>
+  <data name="Tagline" xml:space="preserve">
+    <value>เธ•เธฑเธงเธเธฑเธ”เธเธฒเธฃเธ”เธฒเธงเธเนเนเธซเธฅเธ”เธชเธทเนเธญ</value>
+  </data>
+  <data name="AddUrl" xml:space="preserve">
+    <value>เน€เธเธดเนเธกเธฅเธดเธเธเน</value>
+  </data>
+  <data name="StartAll" xml:space="preserve">
+    <value>เน€เธฃเธดเนเธกเธ—เธฑเนเธเธซเธกเธ”</value>
+  </data>
+  <data name="PauseAll" xml:space="preserve">
+    <value>เธซเธขเธธเธ”เธ—เธฑเนเธเธซเธกเธ”</value>
+  </data>
+  <data name="Pause" xml:space="preserve">
+    <value>เธซเธขเธธเธ”</value>
+  </data>
+  <data name="Resume" xml:space="preserve">
+    <value>เธ—เธณเธ•เนเธญ</value>
+  </data>
+  <data name="ResumeAll" xml:space="preserve">
+    <value>เธ—เธณเธ•เนเธญเธ—เธฑเนเธเธซเธกเธ”</value>
+  </data>
+  <data name="OK" xml:space="preserve">
+    <value>เธ•เธเธฅเธ</value>
+  </data>
+  <data name="Remove" xml:space="preserve">
+    <value>เธฅเธ</value>
+  </data>
+  <data name="ClearHistory" xml:space="preserve">
+    <value>เธฅเนเธฒเธเธเธฃเธฐเธงเธฑเธ•เธด</value>
+  </data>
+  <data name="OpenFolder" xml:space="preserve">
+    <value>เน€เธเธดเธ”เนเธเธฅเน€เธ”เธญเธฃเน</value>
+  </data>
+  <data name="OpenFile" xml:space="preserve">
+    <value>เน€เธเธดเธ”เนเธเธฅเน</value>
+  </data>
+  <data name="CopyUrl" xml:space="preserve">
+    <value>เธเธฑเธ”เธฅเธญเธเธฅเธดเธเธเน</value>
+  </data>
+  <data name="Retry" xml:space="preserve">
+    <value>เธฅเธญเธเนเธซเธกเน</value>
+  </data>
+  <data name="Cancel" xml:space="preserve">
+    <value>เธขเธเน€เธฅเธดเธ</value>
+  </data>
+  <data name="Close" xml:space="preserve">
+    <value>เธเธดเธ”</value>
+  </data>
+  <data name="Save" xml:space="preserve">
+    <value>เธเธฑเธเธ—เธถเธ</value>
+  </data>
+  <data name="Settings" xml:space="preserve">
+    <value>เธ•เธฑเนเธเธเนเธฒ</value>
+  </data>
+  <data name="Search" xml:space="preserve">
+    <value>เธเนเธเธซเธฒโ€ฆ</value>
+  </data>
+  <data name="All" xml:space="preserve">
+    <value>เธ—เธฑเนเธเธซเธกเธ”</value>
+  </data>
+  <data name="Video" xml:space="preserve">
+    <value>เธงเธดเธ”เธตเนเธญ</value>
+  </data>
+  <data name="Audio" xml:space="preserve">
+    <value>เน€เธชเธตเธขเธ</value>
+  </data>
+  <data name="Images" xml:space="preserve">
+    <value>เธฃเธนเธเธ เธฒเธ</value>
+  </data>
+  <data name="Documents" xml:space="preserve">
+    <value>เน€เธญเธเธชเธฒเธฃ</value>
+  </data>
+  <data name="Archives" xml:space="preserve">
+    <value>เนเธเธฅเนเธเธตเธเธญเธฑเธ”</value>
+  </data>
+  <data name="Programs" xml:space="preserve">
+    <value>เนเธเธฃเนเธเธฃเธก</value>
+  </data>
+  <data name="Other" xml:space="preserve">
+    <value>เธญเธทเนเธ เน</value>
+  </data>
+  <data name="Queue" xml:space="preserve">
+    <value>เธเธดเธง</value>
+  </data>
+  <data name="Name" xml:space="preserve">
+    <value>เธเธทเนเธญเนเธเธฅเน</value>
+  </data>
+  <data name="Size" xml:space="preserve">
+    <value>เธเธเธฒเธ”</value>
+  </data>
+  <data name="Progress" xml:space="preserve">
+    <value>เธเธงเธฒเธกเธเธทเธเธซเธเนเธฒ</value>
+  </data>
+  <data name="Speed" xml:space="preserve">
+    <value>เธเธงเธฒเธกเน€เธฃเนเธง</value>
+  </data>
+  <data name="Eta" xml:space="preserve">
+    <value>เน€เธงเธฅเธฒเธ—เธตเนเน€เธซเธฅเธทเธญ</value>
+  </data>
+  <data name="Status" xml:space="preserve">
+    <value>เธชเธ–เธฒเธเธฐ</value>
+  </data>
+  <data name="Source" xml:space="preserve">
+    <value>เธ—เธตเนเธกเธฒ</value>
+  </data>
+  <data name="Details" xml:space="preserve">
+    <value>เธฃเธฒเธขเธฅเธฐเน€เธญเธตเธขเธ”</value>
+  </data>
+  <data name="NoSelection" xml:space="preserve">
+    <value>เน€เธฅเธทเธญเธเธฃเธฒเธขเธเธฒเธฃเน€เธเธทเนเธญเธ”เธนเธฃเธฒเธขเธฅเธฐเน€เธญเธตเธขเธ”</value>
+  </data>
+  <data name="Ready" xml:space="preserve">
+    <value>เธเธฃเนเธญเธก</value>
+  </data>
+  <data name="Idle" xml:space="preserve">
+    <value>เนเธกเนเธกเธตเธเธฒเธ</value>
+  </data>
+  <data name="ActiveDownloads" xml:space="preserve">
+    <value>เธเธณเธฅเธฑเธเธ”เธฒเธงเธเนเนเธซเธฅเธ”</value>
+  </data>
+  <data name="Queued" xml:space="preserve">
+    <value>เธฃเธญเธเธดเธง</value>
+  </data>
+  <data name="Probing" xml:space="preserve">
+    <value>เธเธณเธฅเธฑเธเธ•เธฃเธงเธเธชเธญเธ</value>
+  </data>
+  <data name="Downloading" xml:space="preserve">
+    <value>เธเธณเธฅเธฑเธเธ”เธฒเธงเธเนเนเธซเธฅเธ”</value>
+  </data>
+  <data name="Merging" xml:space="preserve">
+    <value>เธเธณเธฅเธฑเธเธฃเธงเธกเนเธเธฅเน</value>
+  </data>
+  <data name="Paused" xml:space="preserve">
+    <value>เธซเธขเธธเธ”เธเธฑเนเธงเธเธฃเธฒเธง</value>
+  </data>
+  <data name="Failed" xml:space="preserve">
+    <value>เธฅเนเธกเน€เธซเธฅเธง</value>
+  </data>
+  <data name="Canceled" xml:space="preserve">
+    <value>เธขเธเน€เธฅเธดเธเนเธฅเนเธง</value>
+  </data>
+  <data name="WaitingForSchedule" xml:space="preserve">
+    <value>เธฃเธญเน€เธงเธฅเธฒ</value>
+  </data>
+  <data name="Completed" xml:space="preserve">
+    <value>เน€เธชเธฃเนเธเธชเธดเนเธ</value>
+  </data>
+  <data name="ClipboardDetected" xml:space="preserve">
+    <value>เธเธเธฅเธดเธเธเนเนเธเธเธฅเธดเธเธเธญเธฃเนเธ”</value>
+  </data>
+  <data name="AddToQueue" xml:space="preserve">
+    <value>เน€เธเธดเนเธกเน€เธเนเธฒเธเธดเธง</value>
+  </data>
+  <data name="Dismiss" xml:space="preserve">
+    <value>เธเธดเธ”</value>
+  </data>
+  <data name="DownloadRoot" xml:space="preserve">
+    <value>เนเธเธฅเน€เธ”เธญเธฃเนเธ”เธฒเธงเธเนเนเธซเธฅเธ”</value>
+  </data>
+  <data name="Browse" xml:space="preserve">
+    <value>เน€เธฅเธทเธญเธโ€ฆ</value>
+  </data>
+  <data name="Connections" xml:space="preserve">
+    <value>เธเธณเธเธงเธเธเธฒเธฃเน€เธเธทเนเธญเธกเธ•เนเธญ</value>
+  </data>
+  <data name="SpeedLimit" xml:space="preserve">
+    <value>เธเธณเธเธฑเธ”เธเธงเธฒเธกเน€เธฃเนเธง (KB/s, 0 = เนเธกเนเธเธณเธเธฑเธ”)</value>
+  </data>
+  <data name="MaxConcurrent" xml:space="preserve">
+    <value>เธ”เธฒเธงเธเนเนเธซเธฅเธ”เธเธฃเนเธญเธกเธเธฑเธเธชเธนเธเธชเธธเธ”</value>
+  </data>
+  <data name="PerHostLimit" xml:space="preserve">
+    <value>เธ•เนเธญเนเธฎเธชเธ•เนเธชเธนเธเธชเธธเธ”</value>
+  </data>
+  <data name="Proxy" xml:space="preserve">
+    <value>เธเธฃเนเธญเธเธเธต (URL)</value>
+  </data>
+  <data name="UserAgent" xml:space="preserve">
+    <value>User-Agent</value>
+  </data>
+  <data name="CategoryFolders" xml:space="preserve">
+    <value>เนเธเธฅเน€เธ”เธญเธฃเนเนเธขเธเธซเธกเธงเธ”</value>
+  </data>
+  <data name="EmbedMetadata" xml:space="preserve">
+    <value>เธเธฑเธเธเนเธญเธกเธนเธฅเน€เธกเธ•เธฒ</value>
+  </data>
+  <data name="EmbedThumbnail" xml:space="preserve">
+    <value>เธเธฑเธเธ เธฒเธเธเธ</value>
+  </data>
+  <data name="WriteSubtitles" xml:space="preserve">
+    <value>เธ”เธฒเธงเธเนเนเธซเธฅเธ”เธเธณเธเธฃเธฃเธขเธฒเธข</value>
+  </data>
+  <data name="ScheduleEnabled" xml:space="preserve">
+    <value>เน€เธเธดเธ”เนเธเนเธ•เธฒเธฃเธฒเธเน€เธงเธฅเธฒ</value>
+  </data>
+  <data name="ScheduleStart" xml:space="preserve">
+    <value>เน€เธฃเธดเนเธก</value>
+  </data>
+  <data name="ScheduleStop" xml:space="preserve">
+    <value>เธซเธขเธธเธ”</value>
+  </data>
+  <data name="AutoResume" xml:space="preserve">
+    <value>เธ—เธณเธ•เนเธญเธญเธฑเธ•เนเธเธกเธฑเธ•เธดเน€เธกเธทเนเธญเน€เธเธดเธ”เนเธญเธ</value>
+  </data>
+  <data name="StopWhenQueueEmpty" xml:space="preserve">
+    <value>เธเธดเธ”เนเธญเธเน€เธกเธทเนเธญเธเธดเธงเธงเนเธฒเธ</value>
+  </data>
+  <data name="ClipboardMonitor" xml:space="preserve">
+    <value>เธ•เธฃเธงเธเธเธฅเธดเธเธเธญเธฃเนเธ”</value>
+  </data>
+  <data name="StartWithWindows" xml:space="preserve">
+    <value>เน€เธฃเธดเนเธกเธเธฃเนเธญเธก Windows</value>
+  </data>
+  <data name="MinimizeToTray" xml:space="preserve">
+    <value>เธขเนเธญเธฅเธเธ–เธฒเธ”</value>
+  </data>
+  <data name="CloseToTray" xml:space="preserve">
+    <value>เธเธดเธ”เธซเธเนเธฒเธ•เนเธฒเธเนเธฅเนเธงเธเนเธญเธเนเธเธ–เธฒเธ”</value>
+  </data>
+  <data name="CookiesFromBrowser" xml:space="preserve">
+    <value>เนเธเนเธเธธเธเธเธตเนเธเธฒเธเน€เธเธฃเธฒเธงเนเน€เธเธญเธฃเน</value>
+  </data>
+  <data name="YtDlpUpdate" xml:space="preserve">
+    <value>เธญเธฑเธเน€เธ”เธ• yt-dlp</value>
+  </data>
+  <data name="Theme" xml:space="preserve">
+    <value>เธเธตเธก</value>
+  </data>
+  <data name="Language" xml:space="preserve">
+    <value>เธ เธฒเธฉเธฒ</value>
+  </data>
+  <data name="Tools" xml:space="preserve">
+    <value>เน€เธเธฃเธทเนเธญเธเธกเธทเธญ</value>
+  </data>
+  <data name="YtDlp" xml:space="preserve">
+    <value>yt-dlp</value>
+  </data>
+  <data name="Ffmpeg" xml:space="preserve">
+    <value>ffmpeg</value>
+  </data>
+  <data name="ReadyStatus" xml:space="preserve">
+    <value>เธเธฃเนเธญเธกเนเธเนเธเธฒเธ</value>
+  </data>
+  <data name="Missing" xml:space="preserve">
+    <value>เนเธกเนเธเธ</value>
+  </data>
+  <data name="Test" xml:space="preserve">
+    <value>เธ—เธ”เธชเธญเธ</value>
+  </data>
+  <data name="UpdateTools" xml:space="preserve">
+    <value>เธญเธฑเธเน€เธ”เธ•เน€เธเธฃเธทเนเธญเธเธกเธทเธญ</value>
+  </data>
+  <data name="FetchTools" xml:space="preserve">
+    <value>เธ”เธฒเธงเธเนเนเธซเธฅเธ”เน€เธเธฃเธทเนเธญเธเธกเธทเธญ</value>
+  </data>
+  <data name="HostRegistration" xml:space="preserve">
+    <value>เธเธฒเธฃเธฅเธเธ—เธฐเน€เธเธตเธขเธ Native Host</value>
+  </data>
+  <data name="RegisterHost" xml:space="preserve">
+    <value>เธฅเธเธ—เธฐเน€เธเธตเธขเธ host</value>
+  </data>
+  <data name="TestPing" xml:space="preserve">
+    <value>เธ—เธ”เธชเธญเธเธเธฒเธฃเน€เธเธทเนเธญเธกเธ•เนเธญ</value>
+  </data>
+  <data name="Extension" xml:space="preserve">
+    <value>เธชเนเธงเธเธเธขเธฒเธขเน€เธเธฃเธฒเธงเนเน€เธเธญเธฃเน</value>
+  </data>
+  <data name="OpenExtensionFolder" xml:space="preserve">
+    <value>เน€เธเธดเธ”เนเธเธฅเน€เธ”เธญเธฃเนเธชเนเธงเธเธเธขเธฒเธข</value>
+  </data>
+  <data name="FirstRunTitle" xml:space="preserve">
+    <value>เน€เธฃเธดเนเธกเธ•เนเธเนเธเนเธเธฒเธ Media Catcher</value>
+  </data>
+  <data name="FirstRunIntro" xml:space="preserve">
+    <value>เธ•เธฃเธงเธเธชเธญเธเธเธงเธฒเธกเธเธฃเนเธญเธกเนเธฅเนเธงเธ—เธณเธ•เธฒเธกเธเธฑเนเธเธ•เธญเธ</value>
+  </data>
+  <data name="Refresh" xml:space="preserve">
+    <value>เธฃเธตเน€เธเธฃเธ</value>
+  </data>
+  <data name="Analyze" xml:space="preserve">
+    <value>เธงเธดเน€เธเธฃเธฒเธฐเธซเน</value>
+  </data>
+  <data name="Analyzing" xml:space="preserve">
+    <value>เธเธณเธฅเธฑเธเธงเธดเน€เธเธฃเธฒเธฐเธซเนโ€ฆ</value>
+  </data>
+  <data name="Add" xml:space="preserve">
+    <value>เน€เธเธดเนเธก</value>
+  </data>
+  <data name="AddPlaylist" xml:space="preserve">
+    <value>เน€เธเธดเนเธกเธ—เธฑเนเธเน€เธเธฅเธขเนเธฅเธดเธชเธ•เน</value>
+  </data>
+  <data name="Format" xml:space="preserve">
+    <value>เธฃเธนเธเนเธเธ</value>
+  </data>
+  <data name="Preset" xml:space="preserve">
+    <value>เธเธธเธ“เธ เธฒเธ</value>
+  </data>
+  <data name="FileName" xml:space="preserve">
+    <value>เธเธทเนเธญเนเธเธฅเน (เนเธกเนเธเธฑเธเธเธฑเธ)</value>
+  </data>
+  <data name="Category" xml:space="preserve">
+    <value>เธซเธกเธงเธ”</value>
+  </data>
+  <data name="Url" xml:space="preserve">
+    <value>เธฅเธดเธเธเน</value>
+  </data>
+  <data name="UrlPlaceholder" xml:space="preserve">
+    <value>เธงเธฒเธเธฅเธดเธเธเนเธงเธดเธ”เธตเนเธญเธซเธฃเธทเธญเนเธเธฅเน</value>
+  </data>
+  <data name="PlaylistItems" xml:space="preserve">
+    <value>เธฃเธฒเธขเธเธฒเธฃเนเธเน€เธเธฅเธขเนเธฅเธดเธชเธ•เน</value>
+  </data>
+  <data name="DirectDownload" xml:space="preserve">
+    <value>เธ”เธฒเธงเธเนเนเธซเธฅเธ”เนเธ”เธขเธ•เธฃเธ</value>
+  </data>
+  <data name="AnalyzeHint" xml:space="preserve">
+    <value>เธฃเธญเธเธฃเธฑเธ YouTube เนเธฅเธฐเน€เธงเนเธเธ—เธตเน yt-dlp เธฃเธญเธเธฃเธฑเธ</value>
+  </data>
+  <data name="Duplicate" xml:space="preserve">
+    <value>เธกเธตเธญเธขเธนเนเนเธเธเธดเธงเนเธฅเนเธง</value>
+  </data>
+  <data name="Added" xml:space="preserve">
+    <value>เน€เธเธดเนเธกเน€เธเนเธฒเธเธดเธงเนเธฅเนเธง</value>
+  </data>
+  <data name="Error" xml:space="preserve">
+    <value>เธเนเธญเธเธดเธ”เธเธฅเธฒเธ”</value>
+  </data>
+  <data name="DownloadFailed" xml:space="preserve">
+    <value>เธ”เธฒเธงเธเนเนเธซเธฅเธ”เธฅเนเธกเน€เธซเธฅเธง</value>
+  </data>
+  <data name="ToolMissing" xml:space="preserve">
+    <value>เนเธกเนเธเธเน€เธเธฃเธทเนเธญเธเธกเธทเธญเธ—เธตเนเธเธณเน€เธเนเธ</value>
+  </data>
+  <data name="AppNotRunning" xml:space="preserve">
+    <value>เนเธญเธเธขเธฑเธเนเธกเนเธ—เธณเธเธฒเธ</value>
+  </data>
+  <data name="HostConnected" xml:space="preserve">
+    <value>เน€เธเธทเนเธญเธกเธ•เนเธญเนเธฅเนเธง</value>
+  </data>
+  <data name="HostNotInstalled" xml:space="preserve">
+    <value>เธขเธฑเธเนเธกเนเธ•เธดเธ”เธ•เธฑเนเธ host</value>
+  </data>
+  <data name="RestartForLanguage" xml:space="preserve">
+    <value>เธ•เนเธญเธเธฃเธตเธชเธ•เธฒเธฃเนเธ—เนเธญเธเน€เธเธทเนเธญเน€เธเธฅเธตเนเธขเธเธ เธฒเธฉเธฒ</value>
+  </data>
+  <data name="OpenApp" xml:space="preserve">
+    <value>เน€เธเธดเธ”เนเธญเธ</value>
+  </data>
+  <data name="Exit" xml:space="preserve">
+    <value>เธญเธญเธ</value>
+  </data>
+  <data name="ShowWindow" xml:space="preserve">
+    <value>เน€เธเธดเธ”เธซเธเนเธฒเธ•เนเธฒเธ</value>
+  </data>
+  <data name="NoDownloads" xml:space="preserve">
+    <value>เธขเธฑเธเนเธกเนเธกเธตเธฃเธฒเธขเธเธฒเธฃเธ”เธฒเธงเธเนเนเธซเธฅเธ”</value>
+  </data>
+  <data name="AddFirst" xml:space="preserve">
+    <value>เธเธ” โ€เน€เธเธดเนเธกเธฅเธดเธเธเนโ€ เน€เธเธทเนเธญเน€เธฃเธดเนเธก</value>
+  </data>
+  <data name="Clear" xml:space="preserve">
+    <value>เธฅเนเธฒเธ</value>
+  </data>
+  <data name="Apply" xml:space="preserve">
+    <value>เธเธณเนเธเนเธเน</value>
+  </data>
+  <data name="ConfirmClearHistory" xml:space="preserve">
+    <value>เธฅเนเธฒเธเธฃเธฒเธขเธเธฒเธฃเธ—เธตเนเน€เธชเธฃเนเธเนเธฅเนเธงเธ—เธฑเนเธเธซเธกเธ”?</value>
+  </data>
+  <data name="SelectFolder" xml:space="preserve">
+    <value>เน€เธฅเธทเธญเธเนเธเธฅเน€เธ”เธญเธฃเน</value>
+  </data>
+  <data name="InvalidUrl" xml:space="preserve">
+    <value>เธฅเธดเธเธเนเนเธกเนเธ–เธนเธเธ•เนเธญเธ</value>
+  </data>
+  <data name="UnsupportedUrl" xml:space="preserve">
+    <value>เธฅเธดเธเธเนเธเธตเนเนเธกเนเธฃเธญเธเธฃเธฑเธ</value>
+  </data>
+  <data name="DrmUnsupported" xml:space="preserve">
+    <value>เน€เธเธทเนเธญเธซเธฒเธเธตเนเธกเธตเธเธฒเธฃเธเนเธญเธเธเธฑเธ DRM</value>
+  </data>
+  <data name="ToolStatus" xml:space="preserve">
+    <value>เธชเธ–เธฒเธเธฐเน€เธเธฃเธทเนเธญเธเธกเธทเธญ</value>
+  </data>
+  <data name="ExtensionsHint" xml:space="preserve">
+    <value>Chrome เธ•เนเธญเธเธ•เธดเธ”เธ•เธฑเนเธเธ”เนเธงเธขเธกเธทเธญเธเนเธฒเธ chrome://extensions (Developer mode โ’ Load unpacked)</value>
+  </data>
+  <data name="InstallHostHint" xml:space="preserve">
+    <value>เธเธ” โ€เธฅเธเธ—เธฐเน€เธเธตเธขเธ hostโ€ เธซเธฃเธทเธญเธฃเธฑเธ scripts/install-native-host.ps1</value>
+  </data>
+  <data name="StorageHint" xml:space="preserve">
+    <value>เธ•เธฑเนเธเธเนเธฒเนเธฅเธฐเธเธดเธงเน€เธเนเธเธ—เธตเน %APPDATA%\MediaCatcher</value>
+  </data>
+  <data name="DownloadsCount" xml:space="preserve">
+    <value>เธฃเธฒเธขเธเธฒเธฃ</value>
+  </data>
+  <data name="Browser" xml:space="preserve">
+    <value>เน€เธเธฃเธฒเธงเนเน€เธเธญเธฃเน</value>
+  </data>
+  <data name="Clipboard" xml:space="preserve">
+    <value>เธเธฅเธดเธเธเธญเธฃเนเธ”</value>
+  </data>
+  <data name="Manual" xml:space="preserve">
+    <value>เธ”เนเธงเธขเธ•เธเน€เธญเธ</value>
+  </data>
+  <data name="Takeover" xml:space="preserve">
+    <value>เนเธขเนเธเธ”เธฒเธงเธเนเนเธซเธฅเธ”</value>
+  </data>
+  <data name="Priority" xml:space="preserve">
+    <value>เธฅเธณเธ”เธฑเธเธเธงเธฒเธกเธชเธณเธเธฑเธ</value>
+  </data>
+  <data name="OpenSettings" xml:space="preserve">
+    <value>เธ•เธฑเนเธเธเนเธฒ</value>
+  </data>
+  <data name="Unknown" xml:space="preserve">
+    <value>เนเธกเนเธ—เธฃเธฒเธ</value>
+  </data>
+</root>

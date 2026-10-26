@@ -1,0 +1,237 @@
+<Window xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:loc="using:MediaCatcher.App.Localization"
+        xmlns:vm="using:MediaCatcher.App.ViewModels"
+        x:Class="MediaCatcher.App.Views.SettingsWindow"
+        x:DataType="vm:SettingsViewModel"
+        Title="{loc:Loc Settings}"
+        Width="840"
+        Height="820"
+        MinHeight="600"
+        Background="{DynamicResource AppBackground}"
+        WindowStartupLocation="CenterOwner">
+
+  <Window.Styles>
+    <Style Selector="TextBlock.h">
+      <Setter Property="FontSize" Value="15" />
+      <Setter Property="FontWeight" Value="SemiBold" />
+      <Setter Property="Foreground" Value="{DynamicResource PrimaryText}" />
+      <Setter Property="Margin" Value="0,0,0,10" />
+    </Style>
+    <Style Selector="TextBlock.l">
+      <Setter Property="FontSize" Value="12" />
+      <Setter Property="Foreground" Value="{DynamicResource SecondaryText}" />
+      <Setter Property="VerticalAlignment" Value="Center" />
+    </Style>
+    <Style Selector="TextBlock.hint">
+      <Setter Property="FontSize" Value="11" />
+      <Setter Property="Foreground" Value="{DynamicResource SecondaryText}" />
+      <Setter Property="TextWrapping" Value="Wrap" />
+    </Style>
+    <Style Selector="Border.section">
+      <Setter Property="Background" Value="{DynamicResource PanelBackground}" />
+      <Setter Property="BorderBrush" Value="{DynamicResource PanelBorder}" />
+      <Setter Property="BorderThickness" Value="1" />
+      <Setter Property="CornerRadius" Value="10" />
+      <Setter Property="Padding" Value="16" />
+    </Style>
+    <Style Selector="Button.primary">
+      <Setter Property="Background" Value="{DynamicResource AccentBrush}" />
+      <Setter Property="Foreground" Value="White" />
+      <Setter Property="CornerRadius" Value="8" />
+      <Setter Property="Padding" Value="18,9" />
+      <Setter Property="FontWeight" Value="SemiBold" />
+    </Style>
+    <Style Selector="Button.secondary">
+      <Setter Property="Background" Value="{DynamicResource PanelAltBackground}" />
+      <Setter Property="Foreground" Value="{DynamicResource PrimaryText}" />
+      <Setter Property="BorderBrush" Value="{DynamicResource PanelBorder}" />
+      <Setter Property="BorderThickness" Value="1" />
+      <Setter Property="CornerRadius" Value="8" />
+      <Setter Property="Padding" Value="12,7" />
+      <Setter Property="FontSize" Value="12" />
+    </Style>
+    <Style Selector="TextBox">
+      <Setter Property="MinHeight" Value="34" />
+    </Style>
+  </Window.Styles>
+
+  <Grid RowDefinitions="*,Auto">
+    <ScrollViewer Margin="24,20,24,8">
+      <StackPanel Spacing="14">
+        <TextBlock Text="{loc:Loc Settings}"
+                   FontSize="22"
+                   FontWeight="SemiBold"
+                   Foreground="{DynamicResource PrimaryText}" />
+
+        <Border Classes="section">
+          <StackPanel>
+            <TextBlock Text="{loc:Loc DownloadRoot}" Classes="h" />
+            <Grid ColumnDefinitions="*,Auto" ColumnSpacing="8" Margin="0,0,0,12">
+              <TextBox Text="{Binding DownloadRoot}" PlaceholderText="{loc:Loc DownloadRoot}" />
+              <Button Grid.Column="1" Classes="secondary" Content="{loc:Loc Browse}" Click="OnBrowseFolder" />
+            </Grid>
+            <Grid ColumnDefinitions="*,*,*" ColumnSpacing="14">
+              <StackPanel>
+                <TextBlock Text="{loc:Loc Connections}" Classes="l" Margin="0,0,0,4" />
+                <TextBox Text="{Binding Connections}" Width="100" HorizontalAlignment="Left" />
+              </StackPanel>
+              <StackPanel Grid.Column="1">
+                <TextBlock Text="{loc:Loc SpeedLimit}" Classes="l" Margin="0,0,0,4" />
+                <TextBox Text="{Binding SpeedLimitKbps}" Width="120" HorizontalAlignment="Left" />
+              </StackPanel>
+              <StackPanel Grid.Column="2">
+                <TextBlock Text="{loc:Loc MaxConcurrent}" Classes="l" Margin="0,0,0,4" />
+                <TextBox Text="{Binding MaxConcurrent}" Width="100" HorizontalAlignment="Left" />
+              </StackPanel>
+            </Grid>
+            <Grid ColumnDefinitions="*,*,*" ColumnSpacing="14" Margin="0,12,0,0">
+              <StackPanel>
+                <TextBlock Text="{loc:Loc PerHostLimit}" Classes="l" Margin="0,0,0,4" />
+                <TextBox Text="{Binding PerHostLimit}" Width="100" HorizontalAlignment="Left" />
+              </StackPanel>
+              <StackPanel Grid.Column="1" Grid.ColumnSpan="2">
+                <TextBlock Text="{loc:Loc Proxy}" Classes="l" Margin="0,0,0,4" />
+                <TextBox Text="{Binding ProxyUrl}" PlaceholderText="http://127.0.0.1:8080" />
+              </StackPanel>
+            </Grid>
+            <StackPanel Margin="0,12,0,0">
+              <TextBlock Text="{loc:Loc UserAgent}" Classes="l" Margin="0,0,0,4" />
+              <TextBox Text="{Binding UserAgent}" />
+            </StackPanel>
+          </StackPanel>
+        </Border>
+
+        <Border Classes="section">
+          <StackPanel>
+            <TextBlock Text="{loc:Loc Tools}" Classes="h" />
+            <Grid ColumnDefinitions="*,*" ColumnSpacing="12">
+              <StackPanel>
+                <TextBlock Text="{loc:Loc YtDlp}" Classes="l" Margin="0,0,0,4" />
+                <TextBox Text="{Binding YtDlpPath}" PlaceholderText="tools\yt-dlp.exe" />
+              </StackPanel>
+              <StackPanel Grid.Column="1">
+                <TextBlock Text="{loc:Loc Ffmpeg}" Classes="l" Margin="0,0,0,4" />
+                <TextBox Text="{Binding FfmpegPath}" PlaceholderText="tools\ffmpeg.exe" />
+              </StackPanel>
+            </Grid>
+            <TextBlock Text="{Binding ToolStatusText}" Classes="hint" Margin="0,8,0,8" />
+            <WrapPanel>
+              <Button Classes="secondary" Content="{loc:Loc Refresh}" Command="{Binding RefreshToolsCommand}" Margin="0,0,8,8" />
+              <Button Classes="secondary" Content="{loc:Loc FetchTools}" Command="{Binding FetchToolsCommand}" Margin="0,0,8,8" />
+              <Button Classes="secondary" Content="{loc:Loc UpdateTools}" Command="{Binding UpdateYtDlpCommand}" Margin="0,0,8,8" />
+            </WrapPanel>
+            <CheckBox Content="{loc:Loc YtDlpUpdate}" IsChecked="{Binding YtDlpAutoUpdateEnabled}" />
+            <Grid ColumnDefinitions="Auto,*" Margin="0,4,0,0">
+              <CheckBox Content="{loc:Loc EmbedMetadata}" IsChecked="{Binding EmbedMetadata}" />
+              <CheckBox Grid.Column="1" Content="{loc:Loc EmbedThumbnail}" IsChecked="{Binding EmbedThumbnail}" Margin="20,0,0,0" />
+            </Grid>
+            <Grid ColumnDefinitions="Auto,*" Margin="0,4,0,0">
+              <CheckBox Content="{loc:Loc WriteSubtitles}" IsChecked="{Binding WriteSubtitles}" />
+              <TextBox Grid.Column="1" Text="{Binding SubtitleLanguages}" Width="180" HorizontalAlignment="Left" Margin="20,0,0,0" />
+            </Grid>
+          </StackPanel>
+        </Border>
+
+        <Border Classes="section">
+          <StackPanel>
+            <TextBlock Text="{loc:Loc CookiesFromBrowser}" Classes="h" />
+            <Grid ColumnDefinitions="*,Auto" ColumnSpacing="12">
+              <CheckBox Content="{loc:Loc CookiesFromBrowser}" IsChecked="{Binding CookiesFromBrowserEnabled}" />
+              <ComboBox Grid.Column="1" ItemsSource="{Binding Browsers}" SelectedItem="{Binding CookiesBrowser}" Width="140" />
+            </Grid>
+          </StackPanel>
+        </Border>
+
+        <Border Classes="section">
+          <StackPanel>
+            <TextBlock Text="{loc:Loc CategoryFolders}" Classes="h" />
+            <ItemsControl ItemsSource="{Binding CategoryFolders}">
+              <ItemsControl.ItemTemplate>
+                <DataTemplate x:DataType="vm:CategoryFolderSetting">
+                  <Grid ColumnDefinitions="160,*" ColumnSpacing="10" Margin="0,0,0,6">
+                    <TextBlock Text="{Binding DisplayName}" Classes="l" />
+                    <TextBox Grid.Column="1" Text="{Binding Folder}" />
+                  </Grid>
+                </DataTemplate>
+              </ItemsControl.ItemTemplate>
+            </ItemsControl>
+          </StackPanel>
+        </Border>
+
+        <Border Classes="section">
+          <StackPanel>
+            <TextBlock Text="{loc:Loc Queue}" Classes="h" />
+            <Grid ColumnDefinitions="Auto,*" ColumnSpacing="10">
+              <CheckBox Content="{loc:Loc StartWithWindows}" IsChecked="{Binding StartWithWindows}" />
+              <CheckBox Grid.Column="1" Content="{loc:Loc ClipboardMonitor}" IsChecked="{Binding ClipboardMonitorEnabled}" />
+            </Grid>
+            <Grid ColumnDefinitions="Auto,*" ColumnSpacing="10" Margin="0,4,0,0">
+              <CheckBox Content="{loc:Loc MinimizeToTray}" IsChecked="{Binding MinimizeToTray}" />
+              <CheckBox Grid.Column="1" Content="{loc:Loc CloseToTray}" IsChecked="{Binding CloseToTray}" Margin="20,0,0,0" />
+            </Grid>
+            <Grid ColumnDefinitions="Auto,*" ColumnSpacing="10" Margin="0,8,0,0">
+              <CheckBox Content="{loc:Loc ScheduleEnabled}" IsChecked="{Binding ScheduleEnabled}" />
+              <CheckBox Grid.Column="1" Content="{loc:Loc AutoResume}" IsChecked="{Binding AutoResumeOnLaunch}" Margin="20,0,0,0" />
+            </Grid>
+            <Grid ColumnDefinitions="Auto,Auto,Auto,*" ColumnSpacing="10" Margin="0,6,0,0">
+              <TextBlock Text="{loc:Loc ScheduleStart}" Classes="l" />
+              <TextBox Grid.Column="1" Text="{Binding ScheduleStart}" PlaceholderText="23:00" Width="90" />
+              <TextBlock Grid.Column="2" Text="{loc:Loc ScheduleStop}" Classes="l" />
+              <TextBox Grid.Column="3" Text="{Binding ScheduleStop}" PlaceholderText="07:00" Width="90" HorizontalAlignment="Left" />
+            </Grid>
+            <CheckBox Content="{loc:Loc StopWhenQueueEmpty}" IsChecked="{Binding StopWhenQueueEmpty}" Margin="0,6,0,0" />
+          </StackPanel>
+        </Border>
+
+        <Border Classes="section">
+          <StackPanel>
+            <TextBlock Text="{loc:Loc Theme}" Classes="h" />
+            <Grid ColumnDefinitions="*,*" ColumnSpacing="12">
+              <ComboBox ItemsSource="{Binding Themes}" SelectedItem="{Binding Theme}" HorizontalAlignment="Stretch" />
+              <ComboBox Grid.Column="1" ItemsSource="{Binding Languages}" SelectedItem="{Binding Language}" HorizontalAlignment="Stretch" />
+            </Grid>
+            <TextBlock Text="{loc:Loc RestartForLanguage}" Classes="hint" Margin="0,8,0,0" />
+          </StackPanel>
+        </Border>
+
+        <Border Classes="section">
+          <StackPanel>
+            <TextBlock Text="{loc:Loc HostRegistration}" Classes="h" />
+            <TextBlock Text="{Binding HostStatusText}" Classes="hint" Margin="0,0,0,8" />
+            <WrapPanel>
+              <Button Classes="secondary" Content="{loc:Loc RegisterHost}" Command="{Binding RegisterHostCommand}" Margin="0,0,8,8" />
+              <Button Classes="secondary" Content="{loc:Loc TestPing}" Command="{Binding TestPingCommand}" Margin="0,0,8,8" />
+              <Button Classes="secondary" Content="{loc:Loc OpenExtensionFolder}" Command="{Binding OpenExtensionFolderCommand}" Margin="0,0,8,8" />
+            </WrapPanel>
+            <TextBlock Text="{loc:Loc ExtensionsHint}" Classes="hint" />
+            <TextBlock Text="{loc:Loc StorageHint}" Classes="hint" Margin="0,4,0,0" />
+          </StackPanel>
+        </Border>
+
+        <Border IsVisible="{Binding HasMessage}"
+                Background="{DynamicResource PanelAltBackground}"
+                BorderBrush="{DynamicResource PanelBorder}"
+                BorderThickness="1"
+                CornerRadius="8"
+                Padding="12,9">
+          <TextBlock Text="{Binding Message}" Classes="hint" Foreground="{DynamicResource PrimaryText}" />
+        </Border>
+      </StackPanel>
+    </ScrollViewer>
+
+    <Border Grid.Row="1"
+            Background="{DynamicResource PanelBackground}"
+            BorderBrush="{DynamicResource PanelBorder}"
+            BorderThickness="0,1,0,0"
+            Padding="24,14">
+      <Grid ColumnDefinitions="*,Auto">
+        <TextBlock Text="{loc:Loc RestartForLanguage}" Classes="hint" VerticalAlignment="Center" />
+        <StackPanel Grid.Column="1" Orientation="Horizontal" Spacing="10">
+          <Button Content="{loc:Loc Cancel}" Command="{Binding CancelCommand}" MinWidth="100" />
+          <Button Classes="primary" Content="{loc:Loc Save}" Command="{Binding SaveCommand}" MinWidth="120" />
+        </StackPanel>
+      </Grid>
+    </Border>
+  </Grid>
+</Window>

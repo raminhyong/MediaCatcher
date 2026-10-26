@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="th">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Media Catcher</title>
+    <link rel="stylesheet" href="popup.css" />
+  </head>
+  <body>
+    <header class="app-header">
+      <div class="brand">
+        <img class="brand-icon" src="../icons/icon48.png" alt="" width="32" height="32" />
+        <div class="brand-text">
+          <h1>Media Catcher</h1>
+          <p id="pageHost">—</p>
+        </div>
+      </div>
+      <span id="mediaCount" class="count-pill">0</span>
+    </header>
+
+    <div class="host-bar" id="hostBar">
+      <span class="host-dot" id="hostDot"></span>
+      <span id="hostLabel">กำลังตรวจสอบแอป...</span>
+    </div>
+
+    <nav class="filters" id="filters">
+      <button class="filter-btn active" data-filter="all" type="button">ทั้งหมด</button>
+      <button class="filter-btn" data-filter="video" type="button">วิดีโอ</button>
+      <button class="filter-btn" data-filter="audio" type="button">เสียง</button>
+      <button class="filter-btn" data-filter="image" type="button">รูปภาพ</button>
+    </nav>
+
+    <main id="mediaList" class="media-list" aria-live="polite"></main>
+
+    <section class="manual-row">
+      <input id="manualUrl" type="text" spellcheck="false" placeholder="วางลิงก์ไฟล์ที่ต้องการ..." />
+      <button id="manualDownload" class="btn btn-ghost" type="button">โหลด</button>
+    </section>
+
+    <footer class="action-row">
+      <button id="downloadAll" class="btn btn-primary" type="button">ดาวน์โหลดทั้งหมด</button>
+      <button id="rescan" class="btn btn-soft" type="button">สแกนใหม่</button>
+      <button id="clear" class="btn btn-soft" type="button">ล้าง</button>
+    </footer>
+
+    <div id="status" class="status" role="status"></div>
+
+    <script src="popup.js"></script>
+  </body>
+</html>

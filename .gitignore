@@ -1,0 +1,32 @@
+# Build output
+bin/
+obj/
+publish/
+artifacts/
+TestResults/
+*.user
+*.suo
+.vs/
+
+# Secrets: extension signing key must never be committed
+.secrets/
+*.pem
+*.pfx
+*.snk
+
+# Downloaded external tools (pinned by scripts/fetch-tools.ps1)
+tools/yt-dlp.exe
+tools/ffmpeg.exe
+tools/ffprobe.exe
+tools/.version.json
+tools/*.zip
+
+# Installer output
+installer/Output/
+installer/*.exe
+
+# Local runtime data
+*.db
+*.db-wal
+*.db-shm
+logs/

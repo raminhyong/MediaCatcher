@@ -1,0 +1,42 @@
+<Application xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:themes="clr-namespace:Material.Styles.Themes;assembly=Material.Styles"
+             x:Class="MediaCatcher.App.App"
+             RequestedThemeVariant="Dark">
+  <Application.Styles>
+    <themes:MaterialTheme BaseTheme="Dark" />
+  </Application.Styles>
+
+  <Application.Resources>
+    <ResourceDictionary>
+      <ResourceDictionary.ThemeDictionaries>
+        <ResourceDictionary x:Key="Dark">
+          <SolidColorBrush x:Key="AppBackground" Color="#0F141B" />
+          <SolidColorBrush x:Key="PanelBackground" Color="#161D27" />
+          <SolidColorBrush x:Key="PanelAltBackground" Color="#1C2530" />
+          <SolidColorBrush x:Key="PanelBorder" Color="#263241" />
+          <SolidColorBrush x:Key="AccentBrush" Color="#2E8BFF" />
+          <SolidColorBrush x:Key="AccentSoftBrush" Color="#1B3A5C" />
+          <SolidColorBrush x:Key="PrimaryText" Color="#E7EEF8" />
+          <SolidColorBrush x:Key="SecondaryText" Color="#9AA9BC" />
+          <SolidColorBrush x:Key="SuccessBrush" Color="#3DDC97" />
+          <SolidColorBrush x:Key="WarningBrush" Color="#F5B84B" />
+          <SolidColorBrush x:Key="DangerBrush" Color="#FF6B6B" />
+        </ResourceDictionary>
+        <ResourceDictionary x:Key="Light">
+          <SolidColorBrush x:Key="AppBackground" Color="#F4F7FB" />
+          <SolidColorBrush x:Key="PanelBackground" Color="#FFFFFF" />
+          <SolidColorBrush x:Key="PanelAltBackground" Color="#EEF3F9" />
+          <SolidColorBrush x:Key="PanelBorder" Color="#D5DEE9" />
+          <SolidColorBrush x:Key="AccentBrush" Color="#0E74E9" />
+          <SolidColorBrush x:Key="AccentSoftBrush" Color="#DCEBFF" />
+          <SolidColorBrush x:Key="PrimaryText" Color="#16202B" />
+          <SolidColorBrush x:Key="SecondaryText" Color="#5B6B7F" />
+          <SolidColorBrush x:Key="SuccessBrush" Color="#12885C" />
+          <SolidColorBrush x:Key="WarningBrush" Color="#A66A00" />
+          <SolidColorBrush x:Key="DangerBrush" Color="#C62828" />
+        </ResourceDictionary>
+      </ResourceDictionary.ThemeDictionaries>
+    </ResourceDictionary>
+  </Application.Resources>
+</Application>

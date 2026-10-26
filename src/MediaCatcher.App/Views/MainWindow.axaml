@@ -1,0 +1,324 @@
+<Window xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:loc="using:MediaCatcher.App.Localization"
+        xmlns:vm="using:MediaCatcher.App.ViewModels"
+        xmlns:dg="clr-namespace:Avalonia.Controls;assembly=Avalonia.Controls.DataGrid"
+        x:Class="MediaCatcher.App.Views.MainWindow"
+        x:DataType="vm:MainWindowViewModel"
+        Title="{loc:Loc AppTitle}"
+        Width="1240"
+        Height="780"
+        MinWidth="980"
+        MinHeight="620"
+        Background="{DynamicResource AppBackground}"
+        WindowStartupLocation="CenterScreen">
+
+  <Window.Styles>
+    <Style Selector="TextBlock.title">
+      <Setter Property="FontSize" Value="22" />
+      <Setter Property="FontWeight" Value="SemiBold" />
+      <Setter Property="Foreground" Value="{DynamicResource PrimaryText}" />
+    </Style>
+    <Style Selector="TextBlock.caption">
+      <Setter Property="FontSize" Value="11" />
+      <Setter Property="Foreground" Value="{DynamicResource SecondaryText}" />
+    </Style>
+    <Style Selector="TextBlock.section">
+      <Setter Property="FontSize" Value="11" />
+      <Setter Property="FontWeight" Value="SemiBold" />
+      <Setter Property="Foreground" Value="{DynamicResource SecondaryText}" />
+      <Setter Property="Margin" Value="0,0,0,8" />
+    </Style>
+    <Style Selector="TextBlock.value">
+      <Setter Property="FontSize" Value="13" />
+      <Setter Property="Foreground" Value="{DynamicResource PrimaryText}" />
+      <Setter Property="TextWrapping" Value="Wrap" />
+    </Style>
+    <Style Selector="Button.primary">
+      <Setter Property="Background" Value="{DynamicResource AccentBrush}" />
+      <Setter Property="Foreground" Value="White" />
+      <Setter Property="CornerRadius" Value="8" />
+      <Setter Property="Padding" Value="16,9" />
+      <Setter Property="FontWeight" Value="SemiBold" />
+    </Style>
+    <Style Selector="Button.toolbar">
+      <Setter Property="Background" Value="{DynamicResource PanelAltBackground}" />
+      <Setter Property="Foreground" Value="{DynamicResource PrimaryText}" />
+      <Setter Property="BorderBrush" Value="{DynamicResource PanelBorder}" />
+      <Setter Property="BorderThickness" Value="1" />
+      <Setter Property="CornerRadius" Value="8" />
+      <Setter Property="Padding" Value="12,7" />
+      <Setter Property="FontSize" Value="12" />
+      <Setter Property="Margin" Value="0,0,8,0" />
+    </Style>
+    <Style Selector="Button.link">
+      <Setter Property="Background" Value="Transparent" />
+      <Setter Property="Foreground" Value="{DynamicResource AccentBrush}" />
+      <Setter Property="Padding" Value="4" />
+      <Setter Property="FontSize" Value="12" />
+    </Style>
+    <Style Selector="ListBox.nav">
+      <Setter Property="Background" Value="Transparent" />
+      <Setter Property="BorderThickness" Value="0" />
+    </Style>
+    <Style Selector="ListBox.nav ListBoxItem">
+      <Setter Property="Padding" Value="10,8" />
+      <Setter Property="Margin" Value="0,1" />
+      <Setter Property="CornerRadius" Value="8" />
+    </Style>
+    <Style Selector="dg|DataGrid">
+      <Setter Property="Background" Value="Transparent" />
+      <Setter Property="BorderThickness" Value="0" />
+      <Setter Property="RowBackground" Value="Transparent" />
+    </Style>
+  </Window.Styles>
+
+  <Grid ColumnDefinitions="236,*,Auto">
+    <Border Grid.Column="0"
+            Background="{DynamicResource PanelBackground}"
+            BorderBrush="{DynamicResource PanelBorder}"
+            BorderThickness="0,0,1,0">
+      <Grid RowDefinitions="Auto,Auto,*,Auto" Margin="18,22,18,18">
+        <StackPanel Orientation="Horizontal" Spacing="10">
+          <Image Source="avares://MediaCatcher.App/Assets/mediacatcher.png"
+                 Width="36"
+                 Height="36"
+                 VerticalAlignment="Center" />
+          <StackPanel VerticalAlignment="Center">
+            <TextBlock Text="{loc:Loc AppTitle}"
+                       FontSize="17"
+                       FontWeight="SemiBold"
+                       Foreground="{DynamicResource PrimaryText}" />
+            <TextBlock Text="{loc:Loc Tagline}" Classes="caption" />
+          </StackPanel>
+        </StackPanel>
+
+        <StackPanel Grid.Row="1" Margin="0,26,0,0">
+          <TextBlock Text="{loc:Loc Queue}" Classes="section" />
+          <ListBox Classes="nav"
+                   ItemsSource="{Binding Categories}"
+                   SelectedItem="{Binding SelectedCategoryFilter}"
+                   SelectionMode="Single">
+            <ListBox.ItemTemplate>
+              <DataTemplate x:DataType="vm:CategoryFilter">
+                <Grid ColumnDefinitions="*,Auto">
+                  <TextBlock Text="{Binding DisplayName}"
+                             FontSize="13"
+                             Foreground="{DynamicResource PrimaryText}"
+                             VerticalAlignment="Center" />
+                  <Border Grid.Column="1"
+                          Background="{DynamicResource PanelAltBackground}"
+                          CornerRadius="8"
+                          Padding="7,1"
+                          MinWidth="22">
+                    <TextBlock Text="{Binding Count}"
+                               FontSize="10"
+                               HorizontalAlignment="Center"
+                               Foreground="{DynamicResource SecondaryText}" />
+                  </Border>
+                </Grid>
+              </DataTemplate>
+            </ListBox.ItemTemplate>
+          </ListBox>
+        </StackPanel>
+
+        <StackPanel Grid.Row="3" Spacing="8">
+          <Button Classes="toolbar"
+                  HorizontalAlignment="Stretch"
+                  Content="{loc:Loc Settings}"
+                  Command="{Binding OpenSettingsCommand}" />
+          <TextBlock Text="{Binding VersionText}" Classes="caption" Margin="2,0,0,0" />
+        </StackPanel>
+      </Grid>
+    </Border>
+
+    <Grid Grid.Column="1" RowDefinitions="Auto,Auto,Auto,Auto,*,Auto" Margin="22,20,22,14">
+      <Grid ColumnDefinitions="*,Auto">
+        <StackPanel Spacing="2">
+          <TextBlock Text="{loc:Loc Queue}" Classes="title" />
+          <TextBlock Text="{Binding DownloadsCountText}" Classes="caption" />
+        </StackPanel>
+        <Button Grid.Column="1"
+                Classes="primary"
+                Content="{loc:Loc AddUrl}"
+                Command="{Binding AddUrlCommand}"
+                VerticalAlignment="Center" />
+      </Grid>
+
+      <StackPanel Grid.Row="1" Orientation="Horizontal" Margin="0,16,0,12">
+        <Button Classes="toolbar" Content="{loc:Loc ResumeAll}" Command="{Binding ResumeAllCommand}" />
+        <Button Classes="toolbar" Content="{loc:Loc PauseAll}" Command="{Binding PauseAllCommand}" />
+        <Button Classes="toolbar" Content="{loc:Loc ClearHistory}" Command="{Binding ClearHistoryCommand}" />
+        <Button Classes="toolbar" Content="{loc:Loc OpenFolder}" Command="{Binding OpenFolderCommand}" />
+      </StackPanel>
+
+      <Border Grid.Row="2"
+              IsVisible="{Binding HasClipboardSuggestion}"
+              Background="{DynamicResource AccentSoftBrush}"
+              BorderBrush="{DynamicResource AccentBrush}"
+              BorderThickness="1"
+              CornerRadius="10"
+              Padding="12,9"
+              Margin="0,0,0,10">
+        <Grid ColumnDefinitions="*,Auto,Auto">
+          <StackPanel Spacing="1">
+            <TextBlock Text="{loc:Loc ClipboardDetected}" FontSize="11" Foreground="{DynamicResource SecondaryText}" />
+            <TextBlock Text="{Binding ClipboardSuggestion}" Classes="value" TextTrimming="CharacterEllipsis" />
+          </StackPanel>
+          <Button Grid.Column="1" Classes="primary" Margin="8,0" Content="{loc:Loc AddToQueue}"
+                  Command="{Binding AddClipboardCommand}" />
+          <Button Grid.Column="2" Classes="link" Content="{loc:Loc Dismiss}"
+                  Command="{Binding DismissClipboardCommand}" />
+        </Grid>
+      </Border>
+
+      <Border Grid.Row="3"
+              IsVisible="{Binding HasNotification}"
+              Background="{DynamicResource PanelAltBackground}"
+              BorderBrush="{DynamicResource PanelBorder}"
+              BorderThickness="1"
+              CornerRadius="10"
+              Padding="12,8"
+              Margin="0,0,0,10">
+        <Grid ColumnDefinitions="*,Auto">
+          <TextBlock Text="{Binding Notification}" Classes="value" VerticalAlignment="Center" />
+          <Button Grid.Column="1" Classes="link" Content="{loc:Loc Dismiss}"
+                  Command="{Binding DismissNotificationCommand}" />
+        </Grid>
+      </Border>
+
+      <Border Grid.Row="4"
+              Background="{DynamicResource PanelBackground}"
+              BorderBrush="{DynamicResource PanelBorder}"
+              BorderThickness="1"
+              CornerRadius="12"
+              ClipToBounds="True">
+        <Grid>
+          <dg:DataGrid ItemsSource="{Binding FilteredItems}"
+                       SelectedItem="{Binding SelectedItem}"
+                       AutoGenerateColumns="False"
+                       IsReadOnly="True"
+                       SelectionMode="Single"
+                       CanUserReorderColumns="False"
+                       CanUserSortColumns="False"
+                       HeadersVisibility="Column"
+                       GridLinesVisibility="Horizontal"
+                       Margin="4,4,4,4">
+            <dg:DataGrid.Columns>
+              <dg:DataGridTextColumn Header="{loc:Loc Name}" Binding="{Binding FileName}" Width="2*" MinWidth="160" />
+              <dg:DataGridTextColumn Header="{loc:Loc Size}" Binding="{Binding SizeText}" Width="100" />
+              <dg:DataGridTemplateColumn Header="{loc:Loc Progress}" Width="220">
+                <dg:DataGridTemplateColumn.CellTemplate>
+                  <DataTemplate x:DataType="vm:DownloadItemViewModel">
+                    <StackPanel Spacing="4" VerticalAlignment="Center" Margin="0,6">
+                      <ProgressBar Value="{Binding ProgressPercent}" Maximum="100" Height="6" />
+                      <TextBlock Text="{Binding ProgressText}" FontSize="10" Foreground="{DynamicResource SecondaryText}" />
+                    </StackPanel>
+                  </DataTemplate>
+                </dg:DataGridTemplateColumn.CellTemplate>
+              </dg:DataGridTemplateColumn>
+              <dg:DataGridTextColumn Header="{loc:Loc Speed}" Binding="{Binding SpeedText}" Width="92" />
+              <dg:DataGridTextColumn Header="{loc:Loc Eta}" Binding="{Binding EtaText}" Width="86" />
+              <dg:DataGridTextColumn Header="{loc:Loc Status}" Binding="{Binding StatusText}" Width="110" />
+              <dg:DataGridTextColumn Header="{loc:Loc Source}" Binding="{Binding SourceText}" Width="92" />
+            </dg:DataGrid.Columns>
+          </dg:DataGrid>
+
+          <StackPanel IsVisible="{Binding IsEmpty}"
+                      HorizontalAlignment="Center"
+                      VerticalAlignment="Center"
+                      Spacing="6">
+            <TextBlock Text="{loc:Loc NoDownloads}"
+                       FontSize="16"
+                       Foreground="{DynamicResource SecondaryText}"
+                       HorizontalAlignment="Center" />
+            <TextBlock Text="{loc:Loc AddFirst}"
+                       FontSize="12"
+                       Foreground="{DynamicResource SecondaryText}"
+                       HorizontalAlignment="Center" />
+          </StackPanel>
+        </Grid>
+      </Border>
+
+      <Grid Grid.Row="5" ColumnDefinitions="Auto,Auto,*,Auto" Margin="4,10,4,0">
+        <TextBlock Text="{Binding StatusText}" Classes="caption" VerticalAlignment="Center" />
+        <TextBlock Grid.Column="1" Text="{Binding SpeedText}" Classes="caption" Margin="16,0,0,0"
+                   Foreground="{DynamicResource SuccessBrush}" VerticalAlignment="Center" />
+        <TextBlock Grid.Column="3" Text="{Binding DownloadRoot}" Classes="caption"
+                   TextTrimming="CharacterEllipsis" VerticalAlignment="Center" MaxWidth="420" />
+      </Grid>
+    </Grid>
+
+    <Border Grid.Column="2"
+            IsVisible="{Binding HasSelection}"
+            Width="320"
+            Background="{DynamicResource PanelBackground}"
+            BorderBrush="{DynamicResource PanelBorder}"
+            BorderThickness="1,0,0,0">
+      <ScrollViewer Margin="18,20,18,16">
+        <StackPanel Spacing="10">
+          <TextBlock Text="{loc:Loc Details}" Classes="section" Margin="0" />
+
+          <TextBlock Text="{Binding SelectedItem.FileName}"
+                     FontSize="16"
+                     FontWeight="SemiBold"
+                     TextWrapping="Wrap"
+                     Foreground="{DynamicResource PrimaryText}" />
+          <TextBlock Text="{Binding SelectedItem.Category}" Classes="caption" />
+
+          <Grid ColumnDefinitions="Auto,*" RowDefinitions="Auto,Auto,Auto,Auto" Margin="0,4,0,0">
+            <TextBlock Text="{loc:Loc Status}" Classes="caption" Margin="0,0,12,6" />
+            <TextBlock Grid.Column="1" Text="{Binding SelectedItem.StatusText}" Classes="value" Margin="0,0,0,6" />
+            <TextBlock Grid.Row="1" Text="{loc:Loc Size}" Classes="caption" Margin="0,0,12,6" />
+            <TextBlock Grid.Row="1" Grid.Column="1" Text="{Binding SelectedItem.SizeText}" Classes="value" Margin="0,0,0,6" />
+            <TextBlock Grid.Row="2" Text="{loc:Loc Eta}" Classes="caption" Margin="0,0,12,6" />
+            <TextBlock Grid.Row="2" Grid.Column="1" Text="{Binding SelectedItem.EtaText}" Classes="value" Margin="0,0,0,6" />
+            <TextBlock Grid.Row="3" Text="{loc:Loc Source}" Classes="caption" Margin="0,0,12,6" />
+            <TextBlock Grid.Row="3" Grid.Column="1" Text="{Binding SelectedItem.SourceText}" Classes="value" Margin="0,0,0,6" />
+          </Grid>
+
+          <ProgressBar Value="{Binding SelectedItem.ProgressPercent}" Maximum="100" Height="8" />
+          <TextBlock Text="{Binding SelectedItem.ProgressText}" Classes="caption" />
+          <TextBlock Text="{Binding SelectedItem.SpeedText}" Classes="caption"
+                     Foreground="{DynamicResource SuccessBrush}" />
+
+          <TextBlock Text="{loc:Loc Details}" Classes="section" Margin="0,8,0,0" />
+          <TextBlock Text="{Binding SelectedItem.Url}"
+                     FontSize="11"
+                     TextWrapping="Wrap"
+                     Foreground="{DynamicResource SecondaryText}" />
+
+          <TextBlock Text="{Binding SelectedItem.Error}"
+                     IsVisible="{Binding SelectedItem.HasError}"
+                     TextWrapping="Wrap"
+                     Foreground="{DynamicResource DangerBrush}"
+                     FontSize="12" />
+
+          <WrapPanel Margin="0,8,0,0">
+            <Button Classes="toolbar" Content="{loc:Loc OpenFile}"
+                    Command="{Binding OpenFileCommand}"
+                    IsEnabled="{Binding SelectedItem.IsCompleted}" />
+            <Button Classes="toolbar" Content="{loc:Loc OpenFolder}"
+                    Command="{Binding OpenFolderCommand}" />
+            <Button Classes="toolbar" Content="{loc:Loc CopyUrl}"
+                    Command="{Binding CopyUrlCommand}" />
+            <Button Classes="toolbar" Content="{loc:Loc Pause}"
+                    Command="{Binding PauseSelectedCommand}"
+                    IsEnabled="{Binding SelectedItem.CanPause}" />
+            <Button Classes="toolbar" Content="{loc:Loc ResumeAll}"
+                    Command="{Binding ResumeSelectedCommand}"
+                    IsEnabled="{Binding SelectedItem.CanResume}" />
+            <Button Classes="toolbar" Content="{loc:Loc Cancel}"
+                    Command="{Binding CancelSelectedCommand}"
+                    IsEnabled="{Binding SelectedItem.CanCancel}" />
+            <Button Classes="toolbar" Content="{loc:Loc Retry}"
+                    Command="{Binding RetrySelectedCommand}"
+                    IsEnabled="{Binding SelectedItem.CanResume}" />
+            <Button Classes="toolbar" Content="{loc:Loc Remove}"
+                    Command="{Binding RemoveSelectedCommand}" />
+          </WrapPanel>
+        </StackPanel>
+      </ScrollViewer>
+    </Border>
+  </Grid>
+</Window>

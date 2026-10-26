@@ -1,0 +1,15 @@
+<Project>
+  <PropertyGroup>
+    <LangVersion>latest</LangVersion>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+    <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
+    <EnableNETAnalyzers>false</EnableNETAnalyzers>
+    <Deterministic>true</Deterministic>
+    <NeutralLanguage>th-TH</NeutralLanguage>
+    <Version>0.1.0</Version>
+    <Authors>MediaCatcher contributors</Authors>
+    <Product>Media Catcher</Product>
+    <Copyright>Copyright (c) MediaCatcher contributors</Copyright>
+  </PropertyGroup>
+</Project>

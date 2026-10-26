@@ -1,0 +1,156 @@
+<Window xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:loc="using:MediaCatcher.App.Localization"
+        xmlns:vm="using:MediaCatcher.App.ViewModels"
+        x:Class="MediaCatcher.App.Views.AddUrlWindow"
+        x:DataType="vm:AddUrlViewModel"
+        Title="{loc:Loc AddUrl}"
+        Width="680"
+        Height="620"
+        MinHeight="460"
+        CanResize="True"
+        Background="{DynamicResource AppBackground}"
+        WindowStartupLocation="CenterOwner">
+
+  <Window.Styles>
+    <Style Selector="TextBlock.label">
+      <Setter Property="FontSize" Value="11" />
+      <Setter Property="FontWeight" Value="SemiBold" />
+      <Setter Property="Foreground" Value="{DynamicResource SecondaryText}" />
+      <Setter Property="Margin" Value="0,0,0,5" />
+    </Style>
+    <Style Selector="TextBlock.hint">
+      <Setter Property="FontSize" Value="11" />
+      <Setter Property="Foreground" Value="{DynamicResource SecondaryText}" />
+    </Style>
+    <Style Selector="Button.primary">
+      <Setter Property="Background" Value="{DynamicResource AccentBrush}" />
+      <Setter Property="Foreground" Value="White" />
+      <Setter Property="CornerRadius" Value="8" />
+      <Setter Property="Padding" Value="18,9" />
+      <Setter Property="FontWeight" Value="SemiBold" />
+    </Style>
+  </Window.Styles>
+
+  <Grid RowDefinitions="*,Auto">
+    <ScrollViewer Margin="24,22,24,8">
+      <StackPanel Spacing="16">
+        <StackPanel Spacing="3">
+          <TextBlock Text="{loc:Loc AddUrl}"
+                     FontSize="22"
+                     FontWeight="SemiBold"
+                     Foreground="{DynamicResource PrimaryText}" />
+          <TextBlock Text="{loc:Loc AnalyzeHint}" Classes="hint" />
+        </StackPanel>
+
+        <StackPanel>
+          <TextBlock Text="{loc:Loc Url}" Classes="label" />
+          <TextBox x:Name="UrlBox"
+                   Text="{Binding Url}"
+                   PlaceholderText="{loc:Loc UrlPlaceholder}"
+                   FontSize="14"
+                   MinHeight="42" />
+        </StackPanel>
+
+        <StackPanel Orientation="Horizontal" Spacing="10">
+          <Button Content="{loc:Loc Analyze}"
+                  Command="{Binding AnalyzeCommand}"
+                  IsVisible="{Binding CanAnalyze}"
+                  IsEnabled="{Binding !IsAnalyzing}"
+                  MinWidth="120" />
+          <TextBlock Text="{loc:Loc Analyzing}"
+                     Classes="hint"
+                     VerticalAlignment="Center"
+                     IsVisible="{Binding IsAnalyzing}" />
+        </StackPanel>
+
+        <Border IsVisible="{Binding HasError}"
+                Background="{DynamicResource PanelAltBackground}"
+                BorderBrush="{DynamicResource DangerBrush}"
+                BorderThickness="1"
+                CornerRadius="8"
+                Padding="12,9">
+          <TextBlock Text="{Binding Error}"
+                     TextWrapping="Wrap"
+                     Foreground="{DynamicResource DangerBrush}"
+                     FontSize="12" />
+        </Border>
+
+        <Border IsVisible="{Binding IsAnalyzed}"
+                Background="{DynamicResource PanelBackground}"
+                BorderBrush="{DynamicResource PanelBorder}"
+                BorderThickness="1"
+                CornerRadius="10"
+                Padding="14">
+          <StackPanel Spacing="6">
+            <TextBlock Text="{Binding Title}"
+                       FontSize="16"
+                       FontWeight="SemiBold"
+                       TextWrapping="Wrap"
+                       Foreground="{DynamicResource PrimaryText}" />
+            <TextBlock Text="{Binding AnalysisSummary}" Classes="hint" />
+            <StackPanel Orientation="Horizontal" Spacing="6" IsVisible="{Binding IsPlaylist}">
+              <TextBlock Text="{loc:Loc PlaylistItems}" Classes="hint" />
+              <TextBlock Text="{Binding PlaylistItemCount}" Classes="hint"
+                         Foreground="{DynamicResource AccentBrush}" />
+            </StackPanel>
+          </StackPanel>
+        </Border>
+
+        <StackPanel Spacing="10" IsVisible="{Binding ShowFormats}">
+          <Grid ColumnDefinitions="*,*" ColumnSpacing="12">
+            <StackPanel>
+              <TextBlock Text="{loc:Loc Format}" Classes="label" />
+              <ComboBox ItemsSource="{Binding Formats}"
+                        SelectedItem="{Binding SelectedFormat}"
+                        IsVisible="{Binding !IsPlaylist}"
+                        HorizontalAlignment="Stretch">
+                <ComboBox.ItemTemplate>
+                  <DataTemplate>
+                    <TextBlock Text="{Binding Label}" FontSize="12" />
+                  </DataTemplate>
+                </ComboBox.ItemTemplate>
+              </ComboBox>
+            </StackPanel>
+            <StackPanel Grid.Column="1">
+              <TextBlock Text="{loc:Loc Preset}" Classes="label" />
+              <ComboBox ItemsSource="{Binding Presets}"
+                        SelectedItem="{Binding SelectedPreset}"
+                        HorizontalAlignment="Stretch" />
+            </StackPanel>
+          </Grid>
+        </StackPanel>
+
+        <Grid ColumnDefinitions="*,2*" ColumnSpacing="12">
+          <StackPanel>
+            <TextBlock Text="{loc:Loc Category}" Classes="label" />
+            <ComboBox ItemsSource="{Binding Categories}"
+                      SelectedItem="{Binding Category}"
+                      HorizontalAlignment="Stretch" />
+          </StackPanel>
+          <StackPanel Grid.Column="1">
+            <TextBlock Text="{loc:Loc FileName}" Classes="label" />
+            <TextBox Text="{Binding FileName}" PlaceholderText="{loc:Loc FileName}" />
+          </StackPanel>
+        </Grid>
+      </StackPanel>
+    </ScrollViewer>
+
+    <Border Grid.Row="1"
+            Background="{DynamicResource PanelBackground}"
+            BorderBrush="{DynamicResource PanelBorder}"
+            BorderThickness="0,1,0,0"
+            Padding="24,14">
+      <Grid ColumnDefinitions="*,Auto">
+        <TextBlock Text="{loc:Loc DirectDownload}"
+                   Classes="hint"
+                   VerticalAlignment="Center"
+                   IsVisible="{Binding !CanAnalyze}" />
+        <StackPanel Grid.Column="1" Orientation="Horizontal" Spacing="10">
+          <Button Content="{loc:Loc Cancel}" Command="{Binding CancelCommand}" MinWidth="100" />
+          <Button Classes="primary" Content="{loc:Loc Add}" Command="{Binding AddCommand}" MinWidth="120" />
+        </StackPanel>
+      </Grid>
+    </Border>
+  </Grid>
+</Window>
