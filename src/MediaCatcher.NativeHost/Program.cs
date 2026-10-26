@@ -163,6 +163,18 @@ internal static class Program
                 Source = request.Source ?? "extension",
                 Analyze = new AnalyzeRequest { Url = request.Url }
             },
+            IpcActions.CombinePdf => new IpcRequest
+            {
+                Id = id,
+                Action = action,
+                Source = request.Source ?? "extension",
+                Combine = new CombinePdfRequest
+                {
+                    Urls = request.Urls ?? [],
+                    FileName = request.FileName,
+                    Referer = request.Referer
+                }
+            },
             _ => null
         };
     }
@@ -170,6 +182,7 @@ internal static class Program
     private static TimeSpan TimeoutFor(string action) => action switch
     {
         IpcActions.Analyze => Protocol.AnalyzeTimeout,
+        IpcActions.CombinePdf => Protocol.CombinePdfTimeout,
         IpcActions.AddBatch => TimeSpan.FromSeconds(30),
         _ => Protocol.AddDownloadTimeout
     };
@@ -238,7 +251,9 @@ internal static class Program
         [
             Path.Combine(baseDirectory, "MediaCatcher.App.exe"),
             Path.GetFullPath(Path.Combine(baseDirectory, "..", "MediaCatcher.App.exe")),
-            Path.GetFullPath(Path.Combine(baseDirectory, "..", "..", "MediaCatcher.App.exe"))
+            Path.GetFullPath(Path.Combine(baseDirectory, "..", "..", "MediaCatcher.App.exe")),
+            Path.GetFullPath(Path.Combine(baseDirectory, "..", "..", "..", "..", "MediaCatcher.App", "bin", "Debug", "net10.0-windows", "MediaCatcher.App.exe")),
+            Path.GetFullPath(Path.Combine(baseDirectory, "..", "..", "..", "..", "MediaCatcher.App", "bin", "Release", "net10.0-windows", "MediaCatcher.App.exe"))
         ];
 
         return candidates.FirstOrDefault(File.Exists);

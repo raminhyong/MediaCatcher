@@ -259,6 +259,10 @@ function sendNativeMessage(message) {
           resolve({ ok: false, error: chrome.runtime.lastError.message });
           return;
         }
+        if (response && response.ok === false && response.message && !response.error) {
+          resolve({ ...response, error: response.message });
+          return;
+        }
         resolve(response || { ok: false, error: 'no response' });
       });
     } catch (error) {
@@ -334,6 +338,7 @@ chrome.runtime.onMessage.addListener((incomingMessage, messageSender, sendRespon
         mimeType: entry.mimeType || '',
         fileSizeBytes: Number(entry.fileSizeBytes) || 0,
         fileName: entry.fileName || deriveFilenameFromUrl(entry.sourceUrl, entry.mimeType || ''),
+        pageUrl: entry.pageUrl || '',
         detectedVia: entry.detectedVia || 'dom',
         discoveredAt: entry.discoveredAt || Date.now()
       }));
@@ -391,6 +396,23 @@ chrome.runtime.onMessage.addListener((incomingMessage, messageSender, sendRespon
   if (message.actionType === 'PING_HOST') {
     sendNativeMessage({ action: 'ping', source: 'extension' })
       .then((response) => sendResponseCallback({ ok: response && response.ok }))
+      .catch((error) => sendResponseCallback({ ok: false, error: String(error) }));
+    return true;
+  }
+
+  if (message.actionType === 'COMBINE_PDF') {
+    sendNativeMessage({
+      action: 'combine-pdf',
+      source: 'extension',
+      urls: Array.isArray(message.urls) ? message.urls : [],
+      fileName: message.fileName,
+      referer: message.referer
+    })
+      .then((response) => sendResponseCallback({
+        ok: response && response.ok,
+        pageCount: response && response.combined ? response.combined.pageCount : undefined,
+        error: response && response.error
+      }))
       .catch((error) => sendResponseCallback({ ok: false, error: String(error) }));
     return true;
   }

@@ -30,6 +30,8 @@ public sealed record NativeRequest
 
     public bool? Takeover { get; init; }
 
+    public List<string>? Urls { get; init; }
+
     public List<AddDownloadRequest>? Items { get; init; }
 }
 
@@ -61,6 +63,15 @@ public sealed record AnalyzeRequest
     public string? Url { get; init; }
 }
 
+public sealed record CombinePdfRequest
+{
+    public IReadOnlyList<string> Urls { get; init; } = Array.Empty<string>();
+
+    public string? FileName { get; init; }
+
+    public string? Referer { get; init; }
+}
+
 public sealed record IpcRequest
 {
     public string Id { get; init; } = Guid.NewGuid().ToString("N");
@@ -74,6 +85,8 @@ public sealed record IpcRequest
     public List<AddDownloadRequest>? Items { get; init; }
 
     public AnalyzeRequest? Analyze { get; init; }
+
+    public CombinePdfRequest? Combine { get; init; }
 
     public static IpcRequest ForAction(string action, string? source = null) =>
         new() { Action = action, Source = source };
@@ -106,6 +119,9 @@ public sealed record IpcResponse
 
     [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
     public AnalyzeResult? Analysis { get; init; }
+
+    [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+    public CombineResult? Combined { get; init; }
 
     public static IpcResponse Success(string id) => new() { Id = id, Ok = true };
 
@@ -188,4 +204,13 @@ public sealed record AnalyzeEntry
     public double? DurationSeconds { get; init; }
 
     public string? ThumbnailUrl { get; init; }
+}
+
+public sealed record CombineResult
+{
+    public string? FilePath { get; init; }
+
+    public int PageCount { get; init; }
+
+    public long TotalBytes { get; init; }
 }

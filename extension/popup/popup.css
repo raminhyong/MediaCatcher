@@ -250,6 +250,11 @@ body {
   color: #cbd5e1;
 }
 
+.badge-document {
+  color: #f9a8d4;
+  border-color: rgba(249, 168, 212, 0.35);
+}
+
 .dl-btn {
   flex: none;
   width: 30px;

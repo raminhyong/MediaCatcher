@@ -20,7 +20,8 @@
     {
       "matches": ["<all_urls>"],
       "js": ["content/media-sniffer.js"],
-      "run_at": "document_start"
+      "run_at": "document_start",
+      "all_frames": true
     }
   ],
   "action": {

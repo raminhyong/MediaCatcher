@@ -17,7 +17,7 @@ public static class EngineRouter
 
     private static readonly string[] DocumentHostSuffixes =
     [
-        "anyflip.com", "fliphtml5.com", "online.fliphtml5.com", "heyzine.com",
+        "anyflip.com", "fliphtml5.com", "online.fliphtml5.com", "pubhtml5.com", "heyzine.com",
         "publuu.com", "flowpaper.com", "flippingbook.com", "issuu.com", "paperturn.com"
     ];
 

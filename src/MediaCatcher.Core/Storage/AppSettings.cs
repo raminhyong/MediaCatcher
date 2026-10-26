@@ -60,7 +60,7 @@ public sealed class AppSettings
 
     public string Theme { get; set; } = "Dark";
 
-    public string Language { get; set; } = "th";
+    public string Language { get; set; } = "en";
 
     public bool ScheduleEnabled { get; set; }
 

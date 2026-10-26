@@ -1,3 +1,4 @@
+using System.Diagnostics;
 using System.Net;
 using MediaCatcher.Contracts;
 using MediaCatcher.Core.Logging;
@@ -13,15 +14,18 @@ public sealed class DocumentEngine
     private readonly HttpClient _client;
     private readonly IAppLogger _logger;
     private readonly IDocumentResolver _resolver;
+    private readonly string? _ffmpegPath;
 
     public DocumentEngine(
         HttpClient? client = null,
         IAppLogger? logger = null,
-        IDocumentResolver? resolver = null)
+        IDocumentResolver? resolver = null,
+        string? ffmpegPath = null)
     {
         _logger = logger ?? NullAppLogger.Instance;
         _client = client ?? CreateDefaultClient();
         _resolver = resolver ?? new FlipbookPageResolver(_client);
+        _ffmpegPath = ffmpegPath;
     }
 
     public async Task<DocumentOutcome> DownloadAsync(
@@ -36,7 +40,7 @@ public sealed class DocumentEngine
 
         try
         {
-            var resolution = await _resolver.ResolveAsync(request.Url, cancellationToken).ConfigureAwait(false);
+            var resolution = await _resolver.ResolveAsync(request.Url, request.UserAgent, cancellationToken).ConfigureAwait(false);
             var pages = resolution.Pages
                 .Take(Math.Clamp(request.MaxPages, 1, 2000))
                 .ToList();
@@ -96,6 +100,93 @@ public sealed class DocumentEngine
         }
     }
 
+    public async Task<DocumentOutcome> BuildPdfFromUrlsAsync(
+        IReadOnlyList<string> urls,
+        string outputDirectory,
+        string? fileName = null,
+        string? referer = null,
+        string? userAgent = null,
+        string? cookies = null,
+        int connections = 4,
+        IProgress<DownloadProgress>? progress = null,
+        CancellationToken cancellationToken = default)
+    {
+        if (urls is null || urls.Count == 0)
+        {
+            return Failure(ErrorCodes.InvalidRequest, "No image URLs were provided.");
+        }
+
+        try
+        {
+            var request = new DocumentDownloadRequest
+            {
+                Url = urls[0],
+                OutputDirectory = outputDirectory,
+                FileName = fileName,
+                Referer = referer,
+                UserAgent = userAgent,
+                Cookies = cookies,
+                Connections = Math.Clamp(connections, 1, 16)
+            };
+
+            var pages = urls
+                .Where(UrlPolicy.IsSupported)
+                .Select((url, index) => new DocumentPage
+                {
+                    Url = url,
+                    Index = index,
+                    Referer = referer
+                })
+                .ToList();
+
+            if (pages.Count == 0)
+            {
+                return Failure(ErrorCodes.InvalidRequest, "No valid image URLs were provided.");
+            }
+
+            var images = await DownloadPagesAsync(request, pages, progress, cancellationToken).ConfigureAwait(false);
+            if (cancellationToken.IsCancellationRequested)
+            {
+                throw new OperationCanceledException(cancellationToken);
+            }
+
+            if (images.Count == 0)
+            {
+                return Failure(ErrorCodes.ExtractionFailed, "No page images could be downloaded.");
+            }
+
+            var pdf = PdfAssembler.Build(images);
+            var resolvedName = ResolveFileName(fileName, null);
+            Directory.CreateDirectory(outputDirectory);
+            var finalPath = FilenamePolicy.EnsureUniquePath(outputDirectory, resolvedName);
+            AtomicFile.WriteAllBytes(finalPath, pdf);
+
+            _logger.Info($"Completed {finalPath} ({images.Count} pages)");
+
+            return new DocumentOutcome
+            {
+                Success = true,
+                FilePath = finalPath,
+                PageCount = images.Count,
+                TotalBytes = pdf.Length
+            };
+        }
+        catch (OperationCanceledException)
+        {
+            throw;
+        }
+        catch (DownloadException exception)
+        {
+            _logger.Warn($"PDF build failed ({exception.Code}): {exception.Message}");
+            return Failure(exception.Code, exception.Message);
+        }
+        catch (Exception exception)
+        {
+            _logger.Error("PDF build failed.", exception);
+            return Failure(ErrorCodes.ExtractionFailed, exception.Message);
+        }
+    }
+
     private async Task<IReadOnlyList<PdfImageInput>> DownloadPagesAsync(
         DocumentDownloadRequest request,
         IReadOnlyList<DocumentPage> pages,
@@ -146,7 +237,7 @@ public sealed class DocumentEngine
         try
         {
             var bytes = await DownloadBytesAsync(request, page, cancellationToken).ConfigureAwait(false);
-            results[index] = ToPdfImage(bytes);
+            results[index] = await ToPdfImageAsync(bytes, cancellationToken).ConfigureAwait(false);
         }
         finally
         {
@@ -223,12 +314,27 @@ public sealed class DocumentEngine
         return httpRequest;
     }
 
-    private static PdfImageInput ToPdfImage(byte[] bytes)
+    private static bool IsJpeg(byte[] bytes) =>
+        bytes.Length >= 2 && bytes[0] == 0xFF && bytes[1] == 0xD8;
+
+    private static bool IsWebp(byte[] bytes) =>
+        bytes.Length >= 12 &&
+        bytes[0] == (byte)'R' && bytes[1] == (byte)'I' && bytes[2] == (byte)'F' && bytes[3] == (byte)'F' &&
+        bytes[8] == (byte)'W' && bytes[9] == (byte)'E' && bytes[10] == (byte)'B' && bytes[11] == (byte)'P';
+
+    private async Task<PdfImageInput> ToPdfImageAsync(byte[] bytes, CancellationToken cancellationToken)
     {
-        if (bytes.Length >= 2 && bytes[0] == 0xFF && bytes[1] == 0xD8)
+        if (IsJpeg(bytes))
         {
             var (width, height) = PdfAssembler.ReadJpegDimensions(bytes);
             return new PdfImageInput(width, height, bytes, PdfImageKind.Jpeg);
+        }
+
+        if (IsWebp(bytes))
+        {
+            var jpeg = await ConvertWebpToJpegAsync(bytes, cancellationToken).ConfigureAwait(false);
+            var (width, height) = PdfAssembler.ReadJpegDimensions(jpeg);
+            return new PdfImageInput(width, height, jpeg, PdfImageKind.Jpeg);
         }
 
         try
@@ -240,9 +346,87 @@ public sealed class DocumentEngine
         {
             throw new DownloadException(
                 ErrorCodes.ExtractionFailed,
-                "A page image is in an unsupported format (expected JPEG or PNG).",
+                "A page image is in an unsupported format (expected JPEG, PNG, or WebP).",
                 exception);
         }
+    }
+
+    private async Task<byte[]> ConvertWebpToJpegAsync(byte[] webpBytes, CancellationToken cancellationToken)
+    {
+        if (string.IsNullOrWhiteSpace(_ffmpegPath))
+        {
+            throw new DownloadException(
+                ErrorCodes.ToolMissing,
+                "ffmpeg is required to convert WebP pages. Run scripts/fetch-tools.ps1.");
+        }
+
+        var startInfo = new ProcessStartInfo
+        {
+            FileName = _ffmpegPath,
+            UseShellExecute = false,
+            CreateNoWindow = true,
+            RedirectStandardError = true
+        };
+
+        var tempDir = Path.Combine(Path.GetTempPath(), "mediacatcher-webp");
+        Directory.CreateDirectory(tempDir);
+        var token = Guid.NewGuid().ToString("N");
+        var inputPath = Path.Combine(tempDir, $"{token}.webp");
+        var outputPath = Path.Combine(tempDir, $"{token}.jpg");
+
+        try
+        {
+            await File.WriteAllBytesAsync(inputPath, webpBytes, cancellationToken).ConfigureAwait(false);
+
+            startInfo.ArgumentList.Add("-y");
+            startInfo.ArgumentList.Add("-i");
+            startInfo.ArgumentList.Add(inputPath);
+            startInfo.ArgumentList.Add("-q:v");
+            startInfo.ArgumentList.Add("2");
+            startInfo.ArgumentList.Add(outputPath);
+
+            using var process = Process.Start(startInfo);
+            if (process is null)
+            {
+                throw new DownloadException(ErrorCodes.ToolMissing, "Unable to start ffmpeg.");
+            }
+
+            await process.WaitForExitAsync(cancellationToken).ConfigureAwait(false);
+
+            if (process.ExitCode != 0 || !File.Exists(outputPath))
+            {
+                throw new DownloadException(ErrorCodes.ExtractionFailed, "ffmpeg failed to convert a WebP page.");
+            }
+
+            return await File.ReadAllBytesAsync(outputPath, cancellationToken).ConfigureAwait(false);
+        }
+        finally
+        {
+            TryDeleteFile(inputPath);
+            TryDeleteFile(outputPath);
+        }
+    }
+
+    private static void TryDeleteFile(string path)
+    {
+        try
+        {
+            if (File.Exists(path))
+            {
+                File.Delete(path);
+            }
+        }
+        catch
+        {
+            // Ignore cleanup failures.
+        }
+    }
+
+    private static async Task<byte[]> ReadAllBytesAsync(Stream stream, CancellationToken cancellationToken)
+    {
+        using var buffer = new MemoryStream();
+        await stream.CopyToAsync(buffer, cancellationToken).ConfigureAwait(false);
+        return buffer.ToArray();
     }
 
     private static string ResolveFileName(string? requested, string? title)

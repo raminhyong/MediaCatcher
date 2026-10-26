@@ -4,6 +4,11 @@
   const MEDIA_EXTENSION_PATTERN =
     /\.(mp4|m4v|webm|mkv|mov|avi|flv|wmv|ts|mp3|m4a|aac|ogg|oga|opus|wav|flac|jpg|jpeg|png|gif|webp|avif|bmp|svg|m3u8|mpd)(?:[?#]|$)/i;
 
+  const DOCUMENT_HOSTS = [
+    'anyflip.com', 'fliphtml5.com', 'pubhtml5.com', 'heyzine.com', 'publuu.com',
+    'flowpaper.com', 'flippingbook.com', 'issuu.com', 'paperturn.com'
+  ];
+
   function normalizeUrl(candidateUrl) {
     if (!candidateUrl) return '';
     try {
@@ -38,6 +43,90 @@
       detectedVia: 'dom',
       discoveredAt: Date.now()
     };
+  }
+
+  function hostMatches(hostname, suffix) {
+    const normalized = (hostname || '').toLowerCase();
+    return normalized === suffix || normalized.endsWith('.' + suffix);
+  }
+
+  function isPageMediaUrl(pageUrl) {
+    if (!pageUrl) return false;
+    let parsed;
+    try {
+      parsed = new URL(pageUrl);
+    } catch (_error) {
+      return false;
+    }
+    if (parsed.protocol !== 'http:' && parsed.protocol !== 'https:') return false;
+
+    const host = parsed.hostname.toLowerCase();
+    const path = parsed.pathname;
+    const segmentCount = path.split('/').filter(Boolean).length;
+
+    if (hostMatches(host, 'youtu.be')) return segmentCount > 0;
+
+    if (hostMatches(host, 'youtube.com') || hostMatches(host, 'youtube-nocookie.com')) {
+      if (path === '/watch' && parsed.searchParams.has('v')) return true;
+      return /^\/(shorts|live|embed)\//.test(path);
+    }
+
+    if (hostMatches(host, 'vimeo.com')) return /^\/\d+/.test(path);
+    if (hostMatches(host, 'dailymotion.com')) return /^\/video\//.test(path);
+    if (hostMatches(host, 'twitch.tv')) return /^\/videos\//.test(path);
+    if (hostMatches(host, 'soundcloud.com')) return segmentCount >= 2;
+    if (hostMatches(host, 'bandcamp.com')) return /^\/(track|album)\//.test(path);
+    if (hostMatches(host, 'bilibili.com')) return /^\/video\//.test(path);
+    if (hostMatches(host, 'nicovideo.jp')) return /^\/watch\//.test(path);
+    if (hostMatches(host, 'rumble.com')) return segmentCount >= 2;
+    if (hostMatches(host, 'streamable.com')) return segmentCount > 0;
+
+    return false;
+  }
+
+  function pageDisplayTitle() {
+    const raw = (document.title || '').trim();
+    if (!raw) return '';
+    return raw
+      .replace(/\s*[-–|]\s*(YouTube|Vimeo|Dailymotion|Twitch|SoundCloud|Bandcamp|bilibili|Rumble|Streamable)\s*$/i, '')
+      .trim();
+  }
+
+  function collectPageUrlRecord() {
+    const pageUrl = normalizeUrl(window.location.href);
+    if (!pageUrl || !isPageMediaUrl(pageUrl)) return null;
+    if (discoveredUrls.has(pageUrl)) return null;
+
+    discoveredUrls.add(pageUrl);
+    const record = createMediaRecord(pageUrl, 'video', '');
+    record.fileName = pageDisplayTitle() || `video_${Date.now()}`;
+    record.detectedVia = 'page-url';
+    return record;
+  }
+
+  function isDocumentPageUrl(pageUrl) {
+    if (!pageUrl) return false;
+    let parsed;
+    try {
+      parsed = new URL(pageUrl);
+    } catch (_error) {
+      return false;
+    }
+    if (parsed.protocol !== 'http:' && parsed.protocol !== 'https:') return false;
+    const host = parsed.hostname.toLowerCase();
+    return DOCUMENT_HOSTS.some((suffix) => hostMatches(host, suffix));
+  }
+
+  function collectDocumentPageUrlRecord() {
+    const pageUrl = normalizeUrl(window.location.href);
+    if (!pageUrl || !isDocumentPageUrl(pageUrl)) return null;
+    if (discoveredUrls.has(pageUrl)) return null;
+
+    discoveredUrls.add(pageUrl);
+    const record = createMediaRecord(pageUrl, 'document', '');
+    record.fileName = (document.title || '').trim() || `document_${Date.now()}`;
+    record.detectedVia = 'page-url';
+    return record;
   }
 
   function collectVideoElements() {
@@ -132,11 +221,17 @@
   }
 
   function scanDomMediaResources() {
+    const pageRecord = collectPageUrlRecord();
+    const documentRecord = collectDocumentPageUrlRecord();
+    const isDocument = Boolean(documentRecord);
+
     const aggregated = [
-      ...collectPerformanceResources(),
+      ...(pageRecord ? [pageRecord] : []),
+      ...(documentRecord ? [documentRecord] : []),
+      ...(isDocument ? [] : collectPerformanceResources()),
       ...collectVideoElements(),
       ...collectAudioElements(),
-      ...collectImageElements(),
+      ...(isDocument ? [] : collectImageElements()),
       ...collectLinkedFiles()
     ];
 

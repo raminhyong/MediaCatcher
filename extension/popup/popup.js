@@ -3,6 +3,7 @@ const ui = {
   mediaCount: document.getElementById('mediaCount'),
   mediaList: document.getElementById('mediaList'),
   filters: document.getElementById('filters'),
+  combinePdf: document.getElementById('combinePdf'),
   downloadAll: document.getElementById('downloadAll'),
   rescan: document.getElementById('rescan'),
   clear: document.getElementById('clear'),
@@ -16,6 +17,7 @@ const ui = {
 
 const state = {
   tabId: null,
+  tabUrl: '',
   tabSupported: false,
   items: [],
   filter: 'all',
@@ -30,6 +32,7 @@ const CATEGORY_LABELS = {
   image: 'รูปภาพ',
   stream: 'สตรีม',
   file: 'ไฟล์',
+  document: 'เอกสาร',
   media: 'มีเดีย'
 };
 
@@ -39,6 +42,7 @@ const CATEGORY_GLYPHS = {
   image: '▣',
   stream: '∞',
   file: '⇩',
+  document: '▤',
   media: '⇩'
 };
 
@@ -50,9 +54,19 @@ function delay(milliseconds) {
   return new Promise((resolve) => setTimeout(resolve, milliseconds));
 }
 
-function sendMessage(message) {
+function sendMessage(message, timeoutMs = 15000) {
   return new Promise((resolve) => {
+    let settled = false;
+    const timer = setTimeout(() => {
+      if (settled) return;
+      settled = true;
+      resolve({});
+    }, timeoutMs);
+
     chrome.runtime.sendMessage(message, (response) => {
+      if (settled) return;
+      settled = true;
+      clearTimeout(timer);
       if (chrome.runtime.lastError) {
         resolve({});
         return;
@@ -184,7 +198,9 @@ function buildMediaRow(item) {
 
   const size = document.createElement('span');
   size.textContent =
-    item.mediaCategory === 'stream' ? 'เพลย์ลิสต์สตรีม' : formatSize(item.fileSizeBytes);
+    item.mediaCategory === 'stream' ? 'เพลย์ลิสต์สตรีม' :
+    item.mediaCategory === 'document' ? 'แปลงเป็น PDF' :
+    formatSize(item.fileSizeBytes);
 
   sub.append(badge, size);
   meta.append(name, sub);
@@ -223,6 +239,8 @@ function render() {
   }
 
   ui.downloadAll.disabled = state.busy || visibleItems.length === 0;
+  ui.combinePdf.disabled =
+    state.busy || state.items.filter((item) => item.mediaCategory === 'image').length === 0;
   ui.clear.disabled = state.busy || state.items.length === 0;
   ui.manualDownload.disabled = state.busy;
 }
@@ -237,6 +255,8 @@ async function startDownload(item) {
   if (response && response.ok) {
     if (item.mediaCategory === 'stream') {
       setStatus('ส่งสตรีมให้ Media Catcher แล้ว (แอปจะแปลงเป็นวิดีโอ)');
+    } else if (item.mediaCategory === 'document') {
+      setStatus('ส่งหนังสือให้ Media Catcher แล้ว (แอปจะแปลงเป็น PDF)');
     } else {
       setStatus(`ส่งให้ Media Catcher: ${item.fileName}`);
     }
@@ -274,6 +294,40 @@ async function downloadAll() {
     `ส่งแล้ว ${accepted} ไฟล์${skipped > 0 ? ` (ข้าม ${skipped})` : ''}`,
     !response.ok && response.error ? true : false
   );
+}
+
+async function combinePdf() {
+  const images = state.items.filter((item) => item.mediaCategory === 'image');
+  if (images.length === 0) {
+    setStatus('ไม่พบรูปภาพในหน้านี้ให้รวมเป็น PDF', true);
+    return;
+  }
+
+  state.busy = true;
+  render();
+  setStatus(`กำลังรวม ${images.length} รูปเป็น PDF...`);
+
+  let baseName = 'document';
+  try {
+    baseName = new URL(state.tabUrl).hostname || 'document';
+  } catch (_error) {
+    baseName = 'document';
+  }
+  const response = await sendMessage({
+    actionType: 'COMBINE_PDF',
+    urls: images.map((item) => item.sourceUrl),
+    fileName: `${baseName}_pages`,
+    referer: state.tabUrl
+  }, 600000);
+
+  state.busy = false;
+  render();
+
+  if (response && response.ok) {
+    setStatus(`บันทึก PDF แล้ว (${(response.pageCount) || images.length} หน้า)`);
+  } else {
+    setStatus(`รวม PDF ไม่สำเร็จ: ${(response && response.error) || 'ไม่ทราบสาเหตุ'}`, true);
+  }
 }
 
 async function rescan() {
@@ -355,6 +409,7 @@ async function initialize() {
     render();
   });
 
+  if (ui.combinePdf) ui.combinePdf.addEventListener('click', combinePdf);
   ui.downloadAll.addEventListener('click', downloadAll);
   ui.rescan.addEventListener('click', rescan);
   ui.clear.addEventListener('click', clearCatalog);
@@ -376,6 +431,7 @@ async function initialize() {
 
   state.tabId = activeTab.id;
   const tabUrl = activeTab.url || '';
+  state.tabUrl = tabUrl;
   state.tabSupported = !BLOCKED_SCHEMES.test(tabUrl);
 
   if (tabUrl) {

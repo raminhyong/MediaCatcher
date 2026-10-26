@@ -61,7 +61,8 @@ $manifest = @{
     allowed_origins   = $origins
 }
 
-$manifest | ConvertTo-Json -Depth 4 | Set-Content -LiteralPath $manifestPath -Encoding UTF8
+$manifestJson = $manifest | ConvertTo-Json -Depth 4
+[System.IO.File]::WriteAllText($manifestPath, $manifestJson, (New-Object System.Text.UTF8Encoding($false)))
 
 if ($Browser -in @("chrome", "all")) {
     $chromeKey = "HKCU:\Software\Google\Chrome\NativeMessagingHosts\$HostName"

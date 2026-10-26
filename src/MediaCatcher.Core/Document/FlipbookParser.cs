@@ -166,6 +166,57 @@ public static partial class FlipbookParser
         return uri.AbsoluteUri;
     }
 
+    public static string? FindEmbeddedBookUrl(string html)
+    {
+        if (string.IsNullOrWhiteSpace(html))
+        {
+            return null;
+        }
+
+        var match = EmbeddedBookUrlRegex().Match(html);
+        if (!match.Success)
+        {
+            return null;
+        }
+
+        var candidate = match.Groups[1].Value.Trim();
+        return candidate.Length > 0 ? candidate : null;
+    }
+
+    public static string? FindRedirectUrl(string html, Uri pageUri)
+    {
+        if (string.IsNullOrWhiteSpace(html))
+        {
+            return null;
+        }
+
+        var match = RedirectRegex().Match(html);
+        if (!match.Success)
+        {
+            return null;
+        }
+
+        var candidate = match.Groups[1].Value.Trim().Trim('"', '\'');
+        if (candidate.Length == 0)
+        {
+            return null;
+        }
+
+        if (Uri.TryCreate(candidate, UriKind.Absolute, out var uri))
+        {
+            return uri.AbsoluteUri;
+        }
+
+        try
+        {
+            return new Uri(pageUri, candidate).AbsoluteUri;
+        }
+        catch (UriFormatException)
+        {
+            return null;
+        }
+    }
+
     private static void CollectFromPageEntry(JsonElement entry, List<string> output, HashSet<string> seen)
     {
         if (entry.ValueKind == JsonValueKind.String)
@@ -335,7 +386,14 @@ public static partial class FlipbookParser
         {
             try
             {
-                uri = new Uri(baseUri, trimmed);
+                if (trimmed.Contains('/') || trimmed.Contains('\\'))
+                {
+                    uri = new Uri(baseUri, trimmed);
+                }
+                else
+                {
+                    uri = new Uri(new Uri(baseUri, "../"), $"files/large/{trimmed}");
+                }
             }
             catch (UriFormatException)
             {
@@ -382,4 +440,10 @@ public static partial class FlipbookParser
 
     [GeneratedRegex("""src\s*=\s*["']([^"']*(?:config|configuration)[^"']*\.js(?:\?[^"']*)?)["']""", RegexOptions.IgnoreCase)]
     private static partial Regex ConfigScriptRegex();
+
+    [GeneratedRegex("""\burl\s*=\s*["'](https?://(?:online\.)?(?:anyflip|fliphtml5|pubhtml5)\.com/[^"']+)["']""", RegexOptions.IgnoreCase)]
+    private static partial Regex EmbeddedBookUrlRegex();
+
+    [GeneratedRegex("""window\.location(?:\.href)?\s*=\s*["']([^"']+)["']""", RegexOptions.IgnoreCase)]
+    private static partial Regex RedirectRegex();
 }

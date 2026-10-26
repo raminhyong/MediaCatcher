@@ -123,7 +123,7 @@ public sealed class SettingsService
 
         if (string.IsNullOrWhiteSpace(settings.Language))
         {
-            settings.Language = "th";
+            settings.Language = "en";
         }
 
         foreach (var category in Models.MediaCategories.All)

@@ -167,6 +167,9 @@ public static class YtDlpArgumentBuilder
             arguments.Add(request.FfmpegDirectory);
         }
 
+        arguments.Add("--");
+        arguments.Add(request.Url);
+
         return arguments;
     }
 

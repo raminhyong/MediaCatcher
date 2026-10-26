@@ -833,7 +833,8 @@ public sealed class QueueManager : IAsyncDisposable
         IProgress<DownloadProgress> progress,
         CancellationToken cancellationToken)
     {
-        var engine = new DocumentEngine(logger: _logger);
+        var locator = ToolLocator.FromSettings(settings, _logger);
+        var engine = new DocumentEngine(logger: _logger, ffmpegPath: locator.Resolve().FfmpegPath);
         var request = new DocumentDownloadRequest
         {
             Url = item.Url,

@@ -13,6 +13,7 @@ public static class Protocol
     public static readonly TimeSpan AddDownloadTimeout = TimeSpan.FromSeconds(10);
     public static readonly TimeSpan StatusTimeout = TimeSpan.FromSeconds(10);
     public static readonly TimeSpan AnalyzeTimeout = TimeSpan.FromSeconds(120);
+    public static readonly TimeSpan CombinePdfTimeout = TimeSpan.FromMinutes(10);
     public static readonly TimeSpan AppStartTimeout = TimeSpan.FromSeconds(10);
 
     public static string PipeNameFor(string userSid) => PipeNamePrefix + userSid;
@@ -25,6 +26,7 @@ public static class IpcActions
     public const string Ping = "ping";
     public const string AddDownload = "add-download";
     public const string AddBatch = "add-batch";
+    public const string CombinePdf = "combine-pdf";
     public const string GetStatus = "get-status";
     public const string OpenApp = "open-app";
     public const string Analyze = "analyze";

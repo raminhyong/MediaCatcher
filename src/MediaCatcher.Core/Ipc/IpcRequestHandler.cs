@@ -1,4 +1,5 @@
 using MediaCatcher.Contracts;
+using MediaCatcher.Core.Document;
 using MediaCatcher.Core.Logging;
 using MediaCatcher.Core.Models;
 using MediaCatcher.Core.Queue;
@@ -63,6 +64,8 @@ public sealed class IpcRequestHandler
                 IpcActions.AddBatch => await HandleAddBatchAsync(request, cancellationToken)
                     .ConfigureAwait(false),
                 IpcActions.Analyze => await HandleAnalyzeAsync(request, cancellationToken)
+                    .ConfigureAwait(false),
+                IpcActions.CombinePdf => await HandleCombinePdfAsync(request, cancellationToken)
                     .ConfigureAwait(false),
                 _ => IpcResponse.Failure(
                     request.Id,
@@ -188,4 +191,63 @@ public sealed class IpcRequestHandler
             Source = source,
             Takeover = request.Takeover ?? false
         };
+
+    private async Task<IpcResponse> HandleCombinePdfAsync(
+        IpcRequest request,
+        CancellationToken cancellationToken)
+    {
+        var urls = request.Combine?.Urls
+            .Where(url => !string.IsNullOrWhiteSpace(url) && UrlPolicy.IsSupported(url))
+            .Distinct(StringComparer.OrdinalIgnoreCase)
+            .ToList();
+
+        if (urls is null || urls.Count == 0)
+        {
+            return IpcResponse.Failure(request.Id, ErrorCodes.InvalidRequest, "At least one image URL is required.");
+        }
+
+        var settings = _settings.Current;
+        var directory = settings.CategoryFolders.TryGetValue(MediaCategories.Documents, out var configured) &&
+                        !string.IsNullOrWhiteSpace(configured)
+            ? configured
+            : MediaCategories.Documents;
+
+        var fullDirectory = Path.IsPathRooted(directory)
+            ? directory
+            : Path.Combine(settings.DownloadRoot, directory);
+
+        var engine = new DocumentEngine(logger: _logger);
+        var outcome = await engine
+            .BuildPdfFromUrlsAsync(
+                urls,
+                fullDirectory,
+                fileName: request.Combine?.FileName,
+                referer: request.Combine?.Referer,
+                userAgent: settings.UserAgent,
+                cookies: null,
+                connections: settings.Connections,
+                progress: null,
+                cancellationToken)
+            .ConfigureAwait(false);
+
+        if (!outcome.Success || outcome.FilePath is null)
+        {
+            return IpcResponse.Failure(
+                request.Id,
+                outcome.ErrorCode ?? ErrorCodes.ExtractionFailed,
+                outcome.ErrorMessage ?? "Unable to build the PDF.");
+        }
+
+        return new IpcResponse
+        {
+            Id = request.Id,
+            Ok = true,
+            Combined = new CombineResult
+            {
+                FilePath = outcome.FilePath,
+                PageCount = outcome.PageCount,
+                TotalBytes = outcome.TotalBytes
+            }
+        };
+    }
 }

@@ -88,8 +88,8 @@ public partial class MainWindow : Window
             FontSize = 14
         };
 
-        var cancelButton = new Button { Content = Strings.Get("Cancel"), MinWidth = 90 };
-        var okButton = new Button { Content = Strings.Get("OK"), MinWidth = 90 };
+        var cancelButton = new Button { Content = "Cancel", MinWidth = 90 };
+        var okButton = new Button { Content = "OK", MinWidth = 90 };
 
         cancelButton.Click += (_, _) => dialog.Close(false);
         okButton.Click += (_, _) => dialog.Close(true);

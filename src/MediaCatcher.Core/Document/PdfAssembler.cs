@@ -60,8 +60,12 @@ public static class PdfAssembler
             var imageBody = BuildImageObject(page);
             WriteObject(imageId, imageBody);
 
-            var content = $"q\n{page.Width} 0 0 {page.Height} 0 0 cm\n/Im0 Do\nQ\n";
-            WriteObject(contentId, Encoding.ASCII.GetBytes(content));
+            var contentBody = Encoding.ASCII.GetBytes($"q\n{page.Width} 0 0 {page.Height} 0 0 cm\n/Im0 Do\nQ\n");
+            var contentStream = Concat(
+                Encoding.ASCII.GetBytes($"<< /Length {contentBody.Length} >>\nstream\n"),
+                contentBody,
+                Encoding.ASCII.GetBytes("\nendstream"));
+            WriteObject(contentId, contentStream);
 
             var pageBody = Encoding.ASCII.GetBytes(
                 $"<< /Type /Page /Parent 2 0 R /MediaBox [0 0 {page.Width} {page.Height}] " +
@@ -105,9 +109,11 @@ public static class PdfAssembler
     private static byte[] Deflate(byte[] input)
     {
         using var output = new MemoryStream();
-        using var zlib = new ZLibStream(output, CompressionLevel.Fastest, leaveOpen: true);
-        zlib.Write(input);
-        zlib.Dispose();
+        using (var deflate = new DeflateStream(output, CompressionLevel.Fastest, leaveOpen: true))
+        {
+            deflate.Write(input);
+        }
+
         return output.ToArray();
     }
 
