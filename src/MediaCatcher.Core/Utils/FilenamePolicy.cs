@@ -37,15 +37,21 @@ public static partial class FilenamePolicy
         name = name.TrimEnd('.', ' ');
         name = LeadingDotsRegex().Replace(name, string.Empty);
 
-        if (name.Contains("..", StringComparison.Ordinal))
-        {
-            name = name.Replace("..", "_", StringComparison.Ordinal);
-        }
-
         var lastDot = name.LastIndexOf('.');
         var hasExtension = lastDot > 0 && name.Length - lastDot <= 12;
         var extension = hasExtension ? name[lastDot..] : string.Empty;
         var baseName = hasExtension ? name[..lastDot] : name;
+
+        if (baseName.Contains("..", StringComparison.Ordinal))
+        {
+            baseName = baseName.Replace("..", "_", StringComparison.Ordinal);
+        }
+
+        var trimmedBase = baseName.TrimEnd('.');
+        if (trimmedBase.Length != baseName.Length)
+        {
+            baseName = trimmedBase + new string('_', baseName.Length - trimmedBase.Length);
+        }
 
         if (string.IsNullOrWhiteSpace(baseName))
         {
