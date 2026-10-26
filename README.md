@@ -113,8 +113,8 @@ tests/
 
 ## การตรวจจับของ Extension
 
-- **URL หน้าเว็บ**: วิดีโอ (YouTube watch/shorts, Vimeo, Dailymotion ฯลฯ) จะถูกตรวจจับจาก URL ของหน้าเว็บ แล้วส่งให้ `YtDlp` (เพราะ YouTube ใช้ MSE/`blob:` จึงไม่มี URL `.mp4` ตรง ๆ ให้ดัก)
-- **Flipbook (ebook)**: เว็บอ่านหนังสือ (anyflip/fliphtml5/pubhtml5/heyzine ฯลฯ) จะถูกตรวจจับเป็นหมวด "เอกสาร" แล้วแปลงเป็น PDF
+- **URL หน้าเว็บ**: วิดีโอ (YouTube watch/shorts, Vimeo, Dailymotion ฯลฯ) ถูกตรวจจับจาก URL ของหน้าเว็บ แล้วส่งให้ `YtDlp` (เพราะ YouTube ใช้ MSE/`blob:` จึงไม่มี URL `.mp4` ตรง ๆ ให้ดัก)
+- **Flipbook (ebook)**: เว็บอ่านหนังสือ (anyflip/fliphtml5/pubhtml5/heyzine ฯลฯ) ถูกตรวจจับเป็นหมวด "เอกสาร" แล้วแปลงเป็น PDF
 - **รวมรูปเป็น PDF**: ปุ่ม "รวมรูปเป็น PDF" ใน popup รวมรูปภาพที่ตรวจพบทั้งหมดเป็น PDF ไฟล์เดียว (ใช้กับ ebook ที่ไม่ใช่ flipbook ได้)
 
 ## หมายเหตุด้านกฎหมาย/จริยธรรม

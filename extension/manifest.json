@@ -2,6 +2,7 @@
   "manifest_version": 3,
   "name": "Media Catcher",
   "version": "1.0.0",
+  "key": "MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAqQhrQiIkBRo9iaz9apQBlUK63Kap1vNkhioW5ucZEVObDO9104r/+OkmDNFmy2PNVBC/pdgiyrM0UbWaxDNpIspEdc4p0fYZ7rwhCNRS7p+HflIbQxsbdUloVG62zi8Yhiiqi875mRhci3RmAEJqU35SKQb9nkA/DoQjwXwWOPWOwQFxb0NBcWLEz6Q3t09gqWP+x1IPgmYJ5d8mvdujv20AsPu7ZXye/rJ/qfbKStYZyek9cm6+L3gVJcUNBZfw9oCJy4w0meFNxnqN+LLMVt3M0Nh203A0ui5jGyM0vITdfRrJJxR4iHeCnGP+fYJZqZliwi5M0RXRmuYhCQ8neQIDAQAB",
   "description": "Detect and download media from the current page through the Media Catcher native app.",
   "minimum_chrome_version": "102",
   "permissions": [

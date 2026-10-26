@@ -4,13 +4,13 @@
 
 ---
 
-## 1. ข้อมูลระบบที่ต้องรู้ก่อนติดตั้ง (Key Facts)
+## 1. ข้อมูลระบบที่กำหนดไว้ล่วงหน้า (Pre-configured Settings)
 
-> **หมายเหตุสำคัญ**: Extension ยังไม่มี `key` ใน `manifest.json` ดังนั้น **Extension ID จะผูกกับ path ของโฟลเดอร์ที่โหลด** (ย้ายโฟลเดอร์ = ID เปลี่ยน) ให้ดู ID จริงได้จากหน้า `chrome://extensions` แล้วใช้กับขั้นตอนลงทะเบียนด้านล่าง
+Extension ID ถูกปักหมุด (pin) ผ่าน `key` ใน `manifest.json` แล้ว ทำให้ ID คงที่ถาวรไม่ว่าจะโหลดจากโฟลเดอร์ใด:
 
 | รายการ | ค่าที่กำหนด | คำอธิบาย |
 | :--- | :--- | :--- |
-| **Extension ID** | ดูจาก `chrome://extensions` | ได้จาก path ของโฟลเดอร์ `extension\` (ไม่มี `key` คงที่) |
+| **Extension ID** | `pmiflkmjephmfoiaebfcmfojlioaoaga` | ปักหมุดผ่าน `key` ใน `manifest.json` (คงที่ถาวร) |
 | **Native Host Name** | `com.mediacatcher.host` | ชื่อ Host สำหรับการสื่อสารแบบ Native Messaging |
 | **Host Registry Key** | `HKCU:\Software\Google\Chrome\NativeMessagingHosts\com.mediacatcher.host` | ตำแหน่งใน Windows Registry |
 | **Host Manifest Path** | `%LOCALAPPDATA%\MediaCatcher\com.mediacatcher.host.json` | ไฟล์การตั้งค่า Host ที่ Chrome ใช้อ้างอิง |
@@ -23,7 +23,7 @@
 ```mermaid
 graph TD
     subgraph Browser["Google Chrome"]
-        EXT["Extension (Media Catcher)<br/>ID: ดูจาก chrome://extensions"]
+        EXT["Extension (Media Catcher)<br/>ID: pmiflkmjephmfoiaebfcmfojlioaoaga"]
         SNIFF["Media Sniffer (webRequest / DOM)"]
         EXT --> SNIFF
     end
@@ -67,13 +67,16 @@ graph TD
    ```text
    D:\Mediafire\Mediafire\Programs\MediaCatcher\extension
    ```
-6. สังเกตการ์ดส่วนขยายจะแสดงชื่อ **Media Catcher** พร้อม ID (เช่น `dhblofgegkcncahimfcgpjncaciphdff`) — จด ID นี้ไว้ใช้ในขั้นตอนลงทะเบียน Host
+6. สังเกตการ์ดส่วนขยายจะแสดงชื่อ **Media Catcher** พร้อม ID:
+   ```text
+   pmiflkmjephmfoiaebfcmfojlioaoaga
+   ```
 7. ปิด Google Chrome แล้วเปิดใหม่อีกครั้ง เพื่อให้เบราว์เซอร์โหลดการเชื่อมต่อ Native Messaging Host
 
 ### ขั้นตอนที่ 2: ลงทะเบียน Native Messaging Host
-เปิด PowerShell แล้วรัน (แทนที่ `<EXTENSION_ID>` ด้วย ID ที่จดไว้ในขั้นตอนที่ 1):
+เปิด PowerShell แล้วรัน:
 ```powershell
-powershell -ExecutionPolicy Bypass -File scripts\register-native-host.ps1 -ExtensionId "<EXTENSION_ID>"
+powershell -ExecutionPolicy Bypass -File scripts\register-native-host.ps1 -ExtensionId "pmiflkmjephmfoiaebfcmfojlioaoaga"
 ```
 จากนั้นปิด Google Chrome ทั้งหมดแล้วเปิดใหม่อีกครั้ง
 
@@ -119,8 +122,8 @@ Get-Content "$env:LOCALAPPDATA\MediaCatcher\com.mediacatcher.host.json"
   "path": "D:\\Mediafire\\Mediafire\\Programs\\MediaCatcher\\src\\MediaCatcher.NativeHost\\bin\\Debug\\net10.0-windows\\MediaCatcher.NativeHost.exe",
   "type": "stdio",
   "allowed_origins": [
-    "chrome-extension://<YOUR_EXTENSION_ID>/",
-    "edge-extension://<YOUR_EXTENSION_ID>/"
+    "chrome-extension://pmiflkmjephmfoiaebfcmfojlioaoaga/",
+    "edge-extension://pmiflkmjephmfoiaebfcmfojlioaoaga/"
   ]
 }
 ```
