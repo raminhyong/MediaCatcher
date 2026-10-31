@@ -47,6 +47,22 @@ public sealed class AppHost : IAsyncDisposable
         Strings.ApplyCulture(loaded.Language);
         await Queue.InitializeAsync(cancellationToken).ConfigureAwait(false);
         _logger.Info($"Media Catcher {AppInfo.Version} initialized. Root={loaded.DownloadRoot}");
+
+        foreach (var issue in HostDiagnostics.Check())
+        {
+            switch (issue.Severity)
+            {
+                case SetupIssueSeverity.Error:
+                    _logger.Error($"Setup problem: {issue.Message}");
+                    break;
+                case SetupIssueSeverity.Warning:
+                    _logger.Warn($"Setup warning: {issue.Message}");
+                    break;
+                default:
+                    _logger.Info($"Setup: {issue.Message}");
+                    break;
+            }
+        }
     }
 
     public void StartPipeServer()
