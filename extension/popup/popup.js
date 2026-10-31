@@ -394,7 +394,8 @@ async function checkHost() {
   if (response && response.ok) {
     setHostStatus(true, 'แอป Media Catcher พร้อมใช้งาน');
   } else {
-    setHostStatus(false, 'ไม่พบแอป — เปิด Media Catcher แล้วลงทะเบียน Native Host ก่อน');
+    const reason = (response && response.error) || 'ไม่ทราบสาเหตุ';
+    setHostStatus(false, `ไม่พบแอป — ${reason}`);
   }
 }
 

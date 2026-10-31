@@ -35,11 +35,17 @@ function Get-Origins {
     foreach ($id in $ExtensionId) {
         if ([string]::IsNullOrWhiteSpace($id)) { continue }
         $trimmed = $id.Trim()
-        $origins.Add("chrome-extension://$trimmed/")
-        $origins.Add("edge-extension://$trimmed/")
+        # Chromium (Chrome AND Edge) only accepts the chrome-extension:// scheme in
+        # allowed_origins -- Edge uses it too. An "edge-extension://" entry makes the
+        # whole manifest fail to parse ("Invalid scheme"), which surfaces as
+        # "Specified native messaging host not found" in the extension.
+        $origin = "chrome-extension://$trimmed/"
+        if (-not $origins.Contains($origin)) { $origins.Add($origin) }
     }
 
-    return $origins
+    # Unary comma: without it PowerShell unrolls a one-element List into a bare
+    # string on return, and the manifest ends up with a scalar allowed_origins.
+    return ,$origins
 }
 
 $nativeHost = Find-NativeHost
@@ -58,7 +64,9 @@ $manifest = @{
     description       = "Media Catcher Native Messaging Host"
     path              = $nativeHost
     type              = "stdio"
-    allowed_origins   = $origins
+    # Force a real JSON array: a single-element List/collection collapses to a
+    # scalar string in ConvertTo-Json, and Chrome then rejects the manifest.
+    allowed_origins   = @($origins.ToArray())
 }
 
 $manifestJson = $manifest | ConvertTo-Json -Depth 4

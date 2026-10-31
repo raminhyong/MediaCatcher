@@ -272,6 +272,8 @@ function sendNativeMessage(message) {
 }
 
 function categoryFor(item) {
+  // Manual-URL downloads arrive without an item object.
+  if (!item) return undefined;
   return item.mediaCategory === 'stream' ? 'Video' : undefined;
 }
 
@@ -395,7 +397,9 @@ chrome.runtime.onMessage.addListener((incomingMessage, messageSender, sendRespon
 
   if (message.actionType === 'PING_HOST') {
     sendNativeMessage({ action: 'ping', source: 'extension' })
-      .then((response) => sendResponseCallback({ ok: response && response.ok }))
+      .then((response) =>
+        sendResponseCallback({ ok: response && response.ok, error: response && response.error })
+      )
       .catch((error) => sendResponseCallback({ ok: false, error: String(error) }));
     return true;
   }
